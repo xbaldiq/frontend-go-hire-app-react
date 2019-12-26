@@ -1,0 +1,18 @@
+
+.logo {
+    padding: 2rem;
+}
+
+.slogan {
+    color: white;
+    /* align-self: flex-end; */
+    margin: 2rem;
+}
+
+.loginPict {
+    max-width: 50%;
+    display: block;
+    margin: auto;
+    /* margin-left: auto;
+    margin-right: auto; */
+}
