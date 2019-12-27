@@ -25,6 +25,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Snackbar from '@material-ui/core/Snackbar';
+import { Alert } from 'react-bootstrap';
 
 const styles = theme => ({
   root: {
@@ -71,7 +73,8 @@ class Login extends Component {
       username: '',
       password: '',
       user_type: 'engineer',
-      token: ''
+      token: '',
+      openSnackbar: false
     };
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -107,15 +110,21 @@ class Login extends Component {
       }
     };
 
-    if (this.state.user_type === 'engineer') {
+    if(!(this.state.username && this.state.password)){
+      alert('Username dan password harus diisi')
+      this.setState({openSnackbar: true})
+    }
+    else if (this.state.user_type === 'engineer') {
       axios
         .post(data.url.engineer, data.register, data.headers)
         .then(res => {
+          this.setState({openSnackbar: true})
+          console.log(res.data.data[0]);
           localStorage.setItem('Token', res.data.data[0].token);
           localStorage.setItem('UserId', res.data.data[0].id);
           localStorage.setItem('user_type', 'engineer');
-          alert('Login engineer success');
-          // redirect to home
+          localStorage.setItem('name', res.data.data[0].name);
+          
           this.props.history.push('/');
         })
         .catch(err => alert('error', err));
@@ -123,13 +132,19 @@ class Login extends Component {
       axios
         .post(data.url.company, data.register, data.headers)
         .then(res => {
+          this.setState({openSnackbar: true})
+          console.log(res.data.data[0]);
           localStorage.setItem('Token', res.data.data[0].token);
           localStorage.setItem('UserId', res.data.data[0].id);
           localStorage.setItem('user_type', 'company');
-          alert('Login company success');
+          localStorage.setItem('username', res.data.data[0].username);
+          this.setState({openSnackbar: true})
           this.props.history.push('/');
         })
-        .catch(err => alert('error', err));
+        .catch(err => {
+          console.log(err);
+          alert(err);
+        });
     }
   }
 
@@ -141,6 +156,24 @@ class Login extends Component {
       // <Navbar />
       <Grid container component='main' className={classes.root}>
         <CssBaseline />
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right'
+          }}
+          open={this.state.openSnackbar}
+          autoHideDuration={3000}
+          onClose={(event, reason) => {
+            if (reason === 'clickaway') {
+              return;
+            }
+            this.setState({ openSnackbar: false});
+          }}
+          ContentProps={{
+            'aria-describedby': 'message-id'
+          }}
+          message={<span id='message-id'>Please enter Username and Password</span>}
+        />
         <Grid item xs={false} sm={4} md={7} className={classes.background}>
           <img src={LogoWhite} className='logo' />
           <img src={LoginPict} className='loginPict' />

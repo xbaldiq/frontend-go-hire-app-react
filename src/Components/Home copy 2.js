@@ -31,17 +31,17 @@ export class Home extends Component {
   }
 
   pagination = (data, page, limit) => {
-    let trimStart = (page - 1) * limit;
-    let trimEnd = trimStart + limit;
-    let trimmedData = data.slice(trimStart, trimEnd);
+    let trimStart = (page - 1) * limit
+    let trimEnd = trimStart + limit
+    let trimmedData = data.slice(trimStart, trimEnd)
 
-    let pages = Math.ceil(data.length / limit);
-
+    let pages = Math.ceil(data.length / limit)
+    
     return {
-      trimmedResponse: trimmedData,
+      trimmedResponse : trimmedData,
       pages: pages
-    };
-  };
+    }
+  }
 
   state = {
     // loginStatus: false,
@@ -54,10 +54,8 @@ export class Home extends Component {
     search: '',
     order: 'asc',
     response: [],
-    total_page: [],
     page: 1,
     limit: 5,
-    pagination_config: {},
   };
 
   componentDidMount() {
@@ -68,16 +66,16 @@ export class Home extends Component {
     }
   }
 
-  async handleOnChange({ target }) {
-    await this.setState({
+  handleOnChange({ target }) {
+    this.setState({
       [target.name]: target.value
     });
-    this.getAllEngineer({})
+    console.log();
   }
 
   // GetAll Engineer
   getAllEngineer = () => {
-    const url2 = `http://localhost:8000/engineer?sort=${this.state.sort_by}&order=${this.state.order}&page=${this.state.page}&limit=${this.state.limit}&${this.state.search_by}=${this.state.search}`;
+    const url2 = `http://localhost:8000/engineer?sort=${this.state.sort_by}&order=${this.state.order}&${this.state.search_by}=${this.state.search}`;
 
     axios
       .get(url2, {
@@ -87,12 +85,7 @@ export class Home extends Component {
         }
       })
       .then(res => {
-        // let data = JSON.parse(res.data[0])
-        // console.log(res.data[0])
-        this.setState({ pagination_config: res.data[0][0] });
-        this.setState({ total_page: res.data[0][0].pagination });
-        // console.log(res.data[0].total_page)
-        // console.log(res.data[1]);
+        console.log(res.data[1]);
         this.setState({ response: res.data[1] });
       })
       .catch(err => alert('error', err));
@@ -132,11 +125,10 @@ export class Home extends Component {
   };
 
   render() {
+
     if (!this.state.token) {
       this.props.history.push('/login');
     }
-
-    const pages = [1, 2, 3, 4, 5, 6, 7, 8];
 
     return (
       <>
@@ -161,13 +153,13 @@ export class Home extends Component {
               onKeyPress={({ key, target }) => {
                 if (key === 'Enter') {
                   // this.setState({ searchName: target.value });
-                  // this.getAllEngineer();
+                  this.getAllEngineer();
                   // console.log(target.value);
                 }
               }}
             />
             <FormControl>
-              <InputLabel id='demo-simple-select-label'>Filter:</InputLabel>
+              <InputLabel id='demo-simple-select-label'>Search by:</InputLabel>
               <Select
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
@@ -192,32 +184,17 @@ export class Home extends Component {
                 <MenuItem value={'skill'}>Skill</MenuItem>
               </Select>
             </FormControl>
-            <FormControl>
-              <InputLabel id='demo-simple-select-label'>Item:</InputLabel>
-              <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                name='limit'
-                value={this.state.limit}
-                onChange={this.handleOnChange}
-              >
-                <MenuItem value={'5'}>5</MenuItem>
-                <MenuItem value={'10'}>10</MenuItem>
-                <MenuItem value={'20'}>20</MenuItem>
-                <MenuItem value={'50'}>50</MenuItem>
-              </Select>
-            </FormControl>
             <div className='navIcon'>
               <Button>
                 <SortIcon
                   color='primary'
                   fontSize='large'
                   className='homeIcon'
-                  onClick={ async ()  => {
-                    await this.state.order === 'asc'
+                  onClick={() => {
+                    this.state.order === 'asc'
                       ? this.setState({ order: 'desc' })
                       : this.setState({ order: 'asc' });
-                   this.getAllEngineer();
+                    this.getAllEngineer();
                   }}
                 ></SortIcon>
                 {this.state.order}
@@ -251,37 +228,15 @@ export class Home extends Component {
         <Grid
           container
           direction='row'
-          justify='center'
-          alignItems='center'
-          padding='1rem'
-        >
-          {/* {pages.map(item => { */}
-          {this.state.total_page.map(item => {
-            return (
-              <Button
-                variant='contained'
-                color='primary'
-                onClick={async () => {
-                  // console.log('klik page:', item);
-                  await this.setState({page: item})
-                  this.getAllEngineer();
-                }}
-              >
-                {item}
-              </Button>
-            );
-          })}
-        </Grid>
-        <Grid
-          container
-          direction='row'
           justify='space-evenly'
           alignItems='center'
           spacing={3}
         >
-          {this.state.response.map(item => {
+          {  
+          this.state.response.map(item => {
             return <Card key={item.id} name={item.name} skill={item.skill} />;
-          })}
+          })
+          }
         </Grid>
       </>
     );
