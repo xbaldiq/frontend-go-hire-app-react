@@ -6,21 +6,21 @@
 
 .searchbar {
     width: 15% ;
-    margin: 1rem;
-    padding: 1rem;
+    /* margin: 1rem; */
+    /* padding: 1rem; */
 }
 
 .navIcon{
-    padding: 1rem;
+    /* padding: 1rem; */
 }
 
 .homeIcon {
     /* margin-left: 1rem ; */
     /* padding: 1rem; */
-    margin: 0.5rem;
+    /* margin: 0.5rem; */
 }
 .accountIcon {
-    margin: 0.5rem;
+    /* margin: 0.5rem; */
     /* margin-left: 1rem ; */
     /* padding: 1rem; */
 }

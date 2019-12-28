@@ -123,7 +123,7 @@ class Login extends Component {
           localStorage.setItem('Token', res.data.data[0].token);
           localStorage.setItem('UserId', res.data.data[0].id);
           localStorage.setItem('user_type', 'engineer');
-          localStorage.setItem('name', res.data.data[0].name);
+          localStorage.setItem('username', res.data.data[0].username);
           
           this.props.history.push('/');
         })

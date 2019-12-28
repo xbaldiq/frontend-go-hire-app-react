@@ -4,6 +4,7 @@ import img from './styles2/img1.jpg'
 
 export default class Card extends Component {
   render() {
+    // console.log(this.props)
     return (
       <div>
         <div className='card'>
@@ -20,12 +21,12 @@ export default class Card extends Component {
           <div className='card-stats'>
             <div className='stat'>
               <div className='value'>
-                40<sup>'s</sup>
+                {this.props.total_project}
               </div>
               <div className='type'>Project</div>
             </div>
             <div className='stat border'>
-              <div className='value'>99%</div>
+              <div className='value'>{this.props.successrate}%</div>
               <div className='type'>Success Rate</div>
             </div>
             {/* <div className='stat'>
