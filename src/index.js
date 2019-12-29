@@ -4,12 +4,17 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-// import Login2 from './Components/Login2';
 import Login from './Components/Login';
 import Register from './Components/Register';
 import Home from './Components/Home';
 import Card from './Components/Card';
 import App from './App';
+
+// test pagination
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import Pagination from "material-ui-flat-pagination";
+
 
 const AppWithRoute = () => {
   return (
@@ -25,6 +30,34 @@ const AppWithRoute = () => {
   );
 };
 
+const theme = createMuiTheme();
+
+class Example extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { offset: 0 };
+  }
+
+  handleClick(offset) {
+    this.setState({ offset });
+  }
+
+  render() {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <Pagination
+          limit={2}
+          offset={this.state.offset}
+          total={5}
+          onClick={(e, offset) => this.handleClick(offset)}
+        />
+      </MuiThemeProvider>
+    );
+  }
+}
+
 ReactDOM.render(<AppWithRoute />, document.getElementById('root'));
+// ReactDOM.render(<Example />, document.getElementById('root'));
 
 serviceWorker.unregister();

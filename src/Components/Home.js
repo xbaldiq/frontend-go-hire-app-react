@@ -33,8 +33,10 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import './styles/navbar.css';
 import './styles/sweetalert.css';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import Pagination from "material-ui-flat-pagination";
 
-const MySwal = withReactContent(Swal);
 
 export class Home extends Component {
   constructor(props) {
@@ -51,7 +53,12 @@ export class Home extends Component {
     this.getListProject = this.getListProject.bind(this);
     this.assignProject = this.assignProject.bind(this);
     this.handleProjectClick = this.handleProjectClick.bind(this);
-    // this.projectAssigment = this.projectAssigment.bind(this)
+  }
+
+  handleClickPagination = async (offset, page) => {
+    await this.setState({ offset });
+    await this.setState({ page });
+    this.getAllEngineer();
   }
 
   pagination = (data, page, limit) => {
@@ -68,11 +75,11 @@ export class Home extends Component {
   };
 
   state = {
-    // loginStatus: false,
     token: localStorage.getItem('Token'),
     UserId: localStorage.getItem('UserId'),
     user_type: localStorage.getItem('user_type'),
     username: localStorage.getItem('username'),
+    total_data: 0,
     search_by: 'name',
     sort_by: 'name',
     search: '',
@@ -89,8 +96,8 @@ export class Home extends Component {
     clickedName: '',
     projectAssignOnClose: '',
     projectSelected: '',
-    profileClicked: false
-    // project_dialo:
+    profileClicked: false,
+    offset: 0,
   };
 
   componentDidMount() {
@@ -100,6 +107,8 @@ export class Home extends Component {
       this.getAllEngineer({});
       this.getListProject();
     }
+
+
   }
 
   async handleOnChange({ target }) {
@@ -119,7 +128,6 @@ export class Home extends Component {
         }
       })
       .then(res => {
-        // console.log(res.data.data)
         this.setState({ projectList: res.data.data });
       })
       .catch(err => alert('error', err));
@@ -145,12 +153,10 @@ export class Home extends Component {
       })
       .catch(err => alert('error', err));
   };
-
   // GetAll Engineer
   getAllEngineer = () => {
     const url2 = `http://localhost:8000/engineer?sort=${this.state.sort_by}&order=${this.state.order}&page=${this.state.page}&limit=${this.state.limit}&${this.state.search_by}=${this.state.search}`;
 
-    // console.log(url2)
     axios
       .get(url2, {
         headers: {
@@ -158,14 +164,11 @@ export class Home extends Component {
           Authorization: `Bearer `.concat(this.state.token)
         }
       })
-      .then(res => {
-        // let data = JSON.parse(res.data[0])
-        // console.log(res.data[0])
-        this.setState({ pagination_config: res.data[0][0] });
-        this.setState({ total_page: res.data[0][0].pagination });
-        // console.log(res.data[0].total_page)
-        // console.log(res.data[1]);
-        this.setState({ response: res.data[1] });
+      .then ( async res => {
+        await this.setState({ pagination_config: res.data[0][0] });
+        await this.setState({ total_page: res.data[0][0].pagination });
+        await this.setState({ response: res.data[1] });
+        await this.setState({ total_data:res.data[0][0].total_data})
       })
       .catch(err => alert('error', err));
   };
@@ -193,7 +196,7 @@ export class Home extends Component {
       .then(res => {
         // console.log(res)
         this.setState({ response: res.data.data });
-        this.setState({ name: res.data.data[0].name})
+        this.setState({ name: res.data.data[0].name });
         console.log(this.state.response);
       })
       .catch(err => alert('error', err));
@@ -225,9 +228,6 @@ export class Home extends Component {
     if (!this.state.token) {
       this.props.history.push('/login');
     }
-
-    const pages = [1, 2, 3, 4, 5, 6, 7, 8];
-
     return (
       <>
         <SweetAlert
@@ -251,11 +251,7 @@ export class Home extends Component {
           onCancel={() => {
             this.setState({ profileClicked: false });
           }}
-
-          // onClose={() => this.setState({ profileClicked: false })}
         />
-
-        {/* <ProjectDialog selectedValue={this.state.projectSelected} open={this.state.projectDialogOpen} onClose={this.state.projectDialogHandleClose} /> */}
         <Dialog
           open={this.state.profilePageOpen}
           onClose={this.handleCloseProfilePage}
@@ -371,21 +367,13 @@ export class Home extends Component {
                   className='homeIcon'
                 />
               </Button>
-              {/* <Button>
-                <HomeIcon
-                  color='primary'
-                  fontSize='large'
-                  className='homeIcon'
-                />
-              </Button> */}
               <Button>
                 <AccountBoxIcon
                   color='primary'
                   fontSize='large'
                   className='accountIcon'
                 />
-                {this.state.name || this.state.username }
-                {/* {this.state.username } */}
+                {this.state.name || this.state.username}
               </Button>
               <Button
                 onClick={() => {
@@ -398,7 +386,7 @@ export class Home extends Component {
             </div>
           </Toolbar>
         </AppBar>
-        <Grid
+        {/* <Grid
           container
           direction='row'
           justify='center'
@@ -406,7 +394,6 @@ export class Home extends Component {
           padding='1rem'
           style={{ paddingTop: '1rem' }}
         >
-          {/* {pages.map(item => { */}
           {this.state.total_page.map((item, id) => {
             return (
               <Button
@@ -422,6 +409,22 @@ export class Home extends Component {
               </Button>
             );
           })}
+        </Grid> */}
+        <Grid
+          container
+          direction='row'
+          justify='space-evenly'
+          alignItems='center'
+          spacing={3}
+          style={{paddingTop: '1.5rem'}}
+        > 
+        <Pagination
+          limit={this.state.limit}
+          offset={this.state.offset}
+          total={this.state.total_data} 
+          onClick={(e, offset, page) => {
+            this.handleClickPagination(offset, page)}}
+        />
         </Grid>
         <Grid
           container
@@ -431,7 +434,6 @@ export class Home extends Component {
           spacing={3}
         >
           {this.state.response.map(item => {
-            // console.log(item);
             return (
               <Button
                 onClick={() => {
@@ -443,8 +445,6 @@ export class Home extends Component {
                     clickedSuccessrate: item.successrate,
                     profileClicked: true
                   });
-
-                  // this.handleClickOpenProfilePage()
                 }}
               >
                 <Card
@@ -457,6 +457,23 @@ export class Home extends Component {
               </Button>
             );
           })}
+          
+        </Grid>
+        <Grid
+          container
+          direction='row'
+          justify='space-evenly'
+          alignItems='center'
+          spacing={3}
+          style={{paddingTop: '1.5rem'}}
+        > 
+        <Pagination
+          limit={this.state.limit}
+          offset={this.state.offset}
+          total={this.state.total_data} 
+          onClick={(e, offset, page) => {
+            this.handleClickPagination(offset, page)}}
+        />
         </Grid>
       </>
     );

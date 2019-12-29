@@ -168,6 +168,7 @@ class Register extends Component {
                 onChange={this.handleOnChange}
               />
 
+              {/* User type selection  */}
               <FormControl className={classes.formControl}>
                 <InputLabel id='demo-simple-select-label'>
                   Register as:
@@ -184,29 +185,23 @@ class Register extends Component {
                 </Select>
               </FormControl>
 
+              {/* Register Submit Button */}
               <Button
                 type='submit'
                 fullWidth
                 variant='contained'
                 color='primary'
                 className={classes.submit}
-                // onKeyPress={({ key, target }) => {
-                //   if (key === 'Enter') {
-                //     console.log('hello register');
-                //   }
-                // }}
-                // onClick= {(e) => {
-                //   console.log('tes button')
-                // }}
               >
                 Register
               </Button>
+
+              {/* Login Button */}
               <Button
                 fullWidth
                 variant='contained'
                 color='secondary'
                 onClick={() => {
-                  //login dulu trus navigasi
                   this.props.history.push('/login');
                 }}
               >
