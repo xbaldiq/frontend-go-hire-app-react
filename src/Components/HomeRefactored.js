@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import Logo from './logo.png';
+import HomeIcon from '@material-ui/icons/Home';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import SortIcon from '@material-ui/icons/Sort';
@@ -24,11 +25,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import SweetAlert from 'sweetalert-react';
-import './Styles/navbar.css';
-import './Styles/sweetalert.css';
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Pagination from "material-ui-flat-pagination";
-
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import './styles/navbar.css';
+import './styles/sweetalert.css';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import Pagination from 'material-ui-flat-pagination';
 
 export class Home extends Component {
   constructor(props) {
@@ -51,7 +54,7 @@ export class Home extends Component {
     await this.setState({ offset });
     await this.setState({ page });
     this.getAllEngineer();
-  }
+  };
 
   pagination = (data, page, limit) => {
     let trimStart = (page - 1) * limit;
@@ -89,7 +92,7 @@ export class Home extends Component {
     projectAssignOnClose: '',
     projectSelected: '',
     profileClicked: false,
-    offset: 0,
+    offset: 0
   };
 
   componentDidMount() {
@@ -99,15 +102,13 @@ export class Home extends Component {
       this.getAllEngineer({});
       this.getListProject();
     }
-
-
   }
 
   async handleOnChange({ target }) {
     await this.setState({
       [target.name]: target.value
     });
-    this.getAllEngineer({});
+    // this.getAllEngineer({});
   }
 
   getListProject = () => {
@@ -156,11 +157,11 @@ export class Home extends Component {
           Authorization: `Bearer `.concat(this.state.token)
         }
       })
-      .then ( async res => {
+      .then(async res => {
         await this.setState({ pagination_config: res.data[0][0] });
         await this.setState({ total_page: res.data[0][0].pagination });
         await this.setState({ response: res.data[1] });
-        await this.setState({ total_data:res.data[0][0].total_data})
+        await this.setState({ total_data: res.data[0][0].total_data });
       })
       .catch(err => alert('error', err));
   };
@@ -222,7 +223,6 @@ export class Home extends Component {
     }
     return (
       <>
-      <CssBaseline/>
         <SweetAlert
           show={this.state.profileClicked}
           title={this.state.clickedName}
@@ -256,13 +256,11 @@ export class Home extends Component {
           </DialogTitle>
           <List>
             {this.state.projectList.map((item, id) => (
-              // <ListItem button onClick={() => handleProjectClick(email)} key={email}>
               <ListItem
                 button
                 key={id}
                 onClick={() => this.handleProjectClick(item)}
               >
-                {/* <ListItem button key={id}> */}
                 <ListItemText primary={item.project_name} />
               </ListItem>
             ))}
@@ -385,15 +383,16 @@ export class Home extends Component {
           justify='space-evenly'
           alignItems='center'
           spacing={3}
-          style={{paddingTop: '1.5rem'}}
-        > 
-        <Pagination
-          limit={this.state.limit}
-          offset={this.state.offset}
-          total={this.state.total_data} 
-          onClick={(e, offset, page) => {
-            this.handleClickPagination(offset, page)}}
-        />
+          style={{ paddingTop: '1.5rem' }}
+        >
+          <Pagination
+            limit={this.state.limit}
+            offset={this.state.offset}
+            total={this.state.total_data}
+            onClick={(e, offset, page) => {
+              this.handleClickPagination(offset, page);
+            }}
+          />
         </Grid>
         <Grid
           container
@@ -426,7 +425,6 @@ export class Home extends Component {
               </Button>
             );
           })}
-          
         </Grid>
         <Grid
           container
@@ -434,15 +432,16 @@ export class Home extends Component {
           justify='space-evenly'
           alignItems='center'
           spacing={3}
-          style={{paddingTop: '1.5rem'}}
-        > 
-        <Pagination
-          limit={this.state.limit}
-          offset={this.state.offset}
-          total={this.state.total_data} 
-          onClick={(e, offset, page) => {
-            this.handleClickPagination(offset, page)}}
-        />
+          style={{ paddingTop: '1.5rem' }}
+        >
+          <Pagination
+            limit={this.state.limit}
+            offset={this.state.offset}
+            total={this.state.total_data}
+            onClick={(e, offset, page) => {
+              this.handleClickPagination(offset, page);
+            }}
+          />
         </Grid>
       </>
     );

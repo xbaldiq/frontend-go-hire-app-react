@@ -6,14 +6,13 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Login from './Components/Login';
 import Register from './Components/Register';
+import HomeCompany from './Components/HomeCompany';
 import Home from './Components/Home';
 import Card from './Components/Card';
-import App from './App';
+import CardRemastered from './Components/newCard';
 
-// test pagination
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import Pagination from "material-ui-flat-pagination";
+import App from './App';
+import HomeEngineer from './Components/HomeEngineer';
 
 
 const AppWithRoute = () => {
@@ -22,6 +21,8 @@ const AppWithRoute = () => {
       <Switch>
         {/* <Route path='/' exact component={App} /> */}
         <Route path='/' exact component={Home} />
+        <Route path='/home' exact component={HomeCompany} />
+        <Route path='/engineer' exact component={HomeEngineer} />
         <Route path='/login' exact component={Login} />
         <Route path='/register' exact component={Register} />
         <Route path='/card' exact component={Card} />
@@ -30,34 +31,14 @@ const AppWithRoute = () => {
   );
 };
 
-const theme = createMuiTheme();
-
-class Example extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { offset: 0 };
-  }
-
-  handleClick(offset) {
-    this.setState({ offset });
-  }
-
-  render() {
-    return (
-      <MuiThemeProvider theme={theme}>
-        <CssBaseline />
-        <Pagination
-          limit={2}
-          offset={this.state.offset}
-          total={5}
-          onClick={(e, offset) => this.handleClick(offset)}
-        />
-      </MuiThemeProvider>
-    );
-  }
-}
-
+// Main App
 ReactDOM.render(<AppWithRoute />, document.getElementById('root'));
+
+
+// Testing App
+ReactDOM.render(<AppWithRoute />, document.getElementById('root'));
+// ReactDOM.render(<Card />, document.getElementById('root'));
+// ReactDOM.render(<CardRemastered/>, document.getElementById('root'));
 // ReactDOM.render(<Example />, document.getElementById('root'));
 
 serviceWorker.unregister();

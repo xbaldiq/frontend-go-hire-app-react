@@ -16,7 +16,7 @@
 }
 .card-image {
   flex-basis: 200px;
-  background: url('redux.png');
+  background: url('./Pict/redux.png');
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   /* background: center; */

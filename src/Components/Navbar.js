@@ -1,27 +1,23 @@
 import React, { Component } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import InputBase from '@material-ui/core/InputBase';
-import SvgIcon from '@material-ui/core/SvgIcon';
 import TextField from '@material-ui/core/TextField';
 import AppBar from '@material-ui/core/AppBar';
-import Paper from '@material-ui/core/Paper';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import Logo from './logo.png';
-import HomeIcon from '@material-ui/icons/Home';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
-import './styles/navbar.css';
+import SortIcon from '@material-ui/icons/Sort';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import CssBaseline from "@material-ui/core/CssBaseline";
+// import './Styles/navbar.css';
 
 export default class Navbar extends Component {
-
-  
 
   render() {
     return (
@@ -35,6 +31,9 @@ export default class Navbar extends Component {
               id='input-with-icon-textfield'
               label='Search'
               variant='outlined'
+              name='search'
+              value={this.props.search}
+              onChange={this.handleOnChange}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -43,10 +42,63 @@ export default class Navbar extends Component {
                 )
               }}
             />
-
-            <div className='navIcon'>
+            <FormControl style={{ paddingLeft: '2rem' }}>
+              <InputLabel style={{ paddingLeft: '3rem' }}>Filter:</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                name='search_by'
+                value={this.props.search_by}
+                onChange={this.handleOnChange}
+              >
+                <MenuItem value={'name'}>Name</MenuItem>
+                <MenuItem value={'skill'}>Skill</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl style={{ paddingLeft: '2rem' }}>
+              <InputLabel style={{ paddingLeft: '3rem' }}>Sort:</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                name='sort_by'
+                value={this.props.sort_by}
+                onChange={this.handleOnChange}
+              >
+                <MenuItem value={'name'}>Name</MenuItem>
+                <MenuItem value={'skill'}>Skill</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl style={{ paddingLeft: '2rem' }}>
+              <InputLabel style={{ paddingLeft: '3rem' }}>Item:</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                name='limit'
+                value={this.props.limit}
+                onChange={this.handleOnChange}
+              >
+                <MenuItem value={'5'}>5</MenuItem>
+                <MenuItem value={'10'}>10</MenuItem>
+                <MenuItem value={'20'}>20</MenuItem>
+                <MenuItem value={'50'}>50</MenuItem>
+              </Select>
+            </FormControl>
               <Button>
-                <HomeIcon
+                <SortIcon
+                  color='primary'
+                  fontSize='large'
+                  className='homeIcon'
+                  onClick={async () => {
+                    (await this.props.order) === 'asc'
+                      ? this.setState({ order: 'desc' })
+                      : this.setState({ order: 'asc' });
+                    this.getAllEngineer();
+                  }}
+                ></SortIcon>
+                {this.props.order}
+              </Button>
+              <Button>
+                <NotificationsIcon
                   color='primary'
                   fontSize='large'
                   className='homeIcon'
@@ -58,15 +110,16 @@ export default class Navbar extends Component {
                   fontSize='large'
                   className='accountIcon'
                 />
-                Username
+                {this.props.name || this.props.username}
               </Button>
-              <Button onClick={() => {
-                this.props.data.changeLoginStatus()
-              }} >
+              <Button
+                onClick={() => {
+                  this.changeLoginStatus();
+                }}
+              >
                 <MeetingRoomIcon color='primary' fontSize='large' />
                 Logout
               </Button>
-            </div>
           </Toolbar>
         </AppBar>
       </>

@@ -17,7 +17,7 @@ import Navbar from './Navbar';
 import Image from 'material-ui-image';
 import Logo from './logo.png';
 import LogoWhite from './arkademy.svg';
-import './styles/Register.css';
+import './Styles/Register.css';
 import LoginPict from './loginPict.svg';
 import axios from 'axios';
 import InputLabel from '@material-ui/core/InputLabel';

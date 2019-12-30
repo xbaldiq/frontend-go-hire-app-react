@@ -1,41 +1,26 @@
 import React, { Component } from 'react';
-import './styles2/Card.css'
-import img from './styles2/img1.jpg'
+import './Styles/newCard.css'
+import totalProject from './Styles/Pict/icon-project.svg'
+import successRate from './Styles/Pict/icon-success-rate.svg'
+import "typeface-roboto";
 
-export default class Card extends Component {
-  render() {
-    // console.log(this.props)
-    return (
-      <div>
-        <div className='card'>
-          <div className='card-image'>
-            {/* <img src={img} width='245px'/> */}
-          </div>
-          <div className='card-text'>
-            <span className='date'>Backend Developer</span>
-            <h3>{this.props.name}</h3>
-            <p>
-              Skill: {this.props.skill || 'Belum diupdate'}
-            </p>
-          </div>
-          <div className='card-stats'>
-            <div className='stat'>
-              <div className='value'>
-                {this.props.total_project}
-              </div>
-              <div className='type'>Project</div>
+export default class newCard extends Component {
+    render() {
+        return (
+            <div className="card-container">
+                <div className="card-main">
+                    <p className="card-text-name">{this.props.name || 'Margaery Tyrell'}</p>
+                    <p className="card-text-description">{this.props.description || 'Fullstack Dev'}</p>
+                    <div className="card-project">
+                        <img src={totalProject} alt=""/>
+                        <p className="card-text-total-project">{this.props.total_project || '77 Project'}</p>
+                        <img src={successRate} alt=""/>
+                        <p className="card-text-success-rate">{this.props.successrate || '99 Success Rate'}</p>
+                    </div>
+                    <hr color="grey" width="200"/>
+                    <p className="card-text-list-skill">{this.props.skill || 'MySQL, React, PHP, MongoDB, Laravel, Docker'}</p>
+                </div>
             </div>
-            <div className='stat border'>
-              <div className='value'>{this.props.successrate}%</div>
-              <div className='type'>Success Rate</div>
-            </div>
-            {/* <div className='stat'>
-              <div className='value'>32</div>
-              <div className='type'>comments</div>
-            </div> */}
-          </div>
-        </div>
-      </div>
-    );
-  }
+        )
+    }
 }

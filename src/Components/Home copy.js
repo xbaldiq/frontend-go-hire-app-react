@@ -25,7 +25,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import SweetAlert from 'sweetalert-react';
 import './Styles/navbar.css';
-import './Styles/sweetalert.css';
+// import './Styles/sweetalert.css';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Pagination from "material-ui-flat-pagination";
 
