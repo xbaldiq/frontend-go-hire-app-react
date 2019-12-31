@@ -145,10 +145,10 @@ export class Home extends Component {
       })
       .catch(err => alert('error', err));
   };
+  
   // GetAll Engineer
   getAllEngineer = () => {
     const url2 = `http://localhost:8000/engineer?sort=${this.state.sort_by}&order=${this.state.order}&page=${this.state.page}&limit=${this.state.limit}&${this.state.search_by}=${this.state.search}`;
-
     axios
       .get(url2, {
         headers: {
@@ -189,7 +189,7 @@ export class Home extends Component {
         // console.log(res)
         this.setState({ response: res.data.data });
         this.setState({ name: res.data.data[0].name });
-        console.log(this.state.response);
+        // console.log(this.state.response);
       })
       .catch(err => alert('error', err));
   };
