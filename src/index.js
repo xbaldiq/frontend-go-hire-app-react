@@ -9,11 +9,9 @@ import Register from './Components/Register';
 import HomeCompany from './Components/HomeCompany';
 import Home from './Components/Home';
 import Card from './Components/Card';
-import CardRemastered from './Components/newCard';
 
 import App from './App';
 import HomeEngineer from './Components/HomeEngineer';
-
 
 const AppWithRoute = () => {
   return (
@@ -36,7 +34,7 @@ ReactDOM.render(<AppWithRoute />, document.getElementById('root'));
 
 
 // Testing App
-ReactDOM.render(<AppWithRoute />, document.getElementById('root'));
+// ReactDOM.render(<AppWithRoute />, document.getElementById('root'));
 // ReactDOM.render(<Card />, document.getElementById('root'));
 // ReactDOM.render(<CardRemastered/>, document.getElementById('root'));
 // ReactDOM.render(<Example />, document.getElementById('root'));
