@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Styles/newCard.css'
+import './Styles/Card.css'
 import totalProject from './Styles/Pict/icon-project.svg'
 import successRate from './Styles/Pict/icon-success-rate.svg'
 import "typeface-roboto";

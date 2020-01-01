@@ -9,7 +9,6 @@ import Register from './Components/Register';
 import HomeCompany from './Components/HomeCompany';
 import Home from './Components/Home';
 import Card from './Components/Card';
-import CardRemastered from './Components/newCard';
 
 import App from './App';
 import HomeEngineer from './Components/HomeEngineer';
