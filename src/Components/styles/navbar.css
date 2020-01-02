@@ -1,26 +1,28 @@
 .toolbar {
-    color: white;
-    background-color: white;
-    min-width: 50%;
+  color: white;
+  background-color: white;
+  min-width: 50%;
+
+  font-family: 'Roboto', sans-serif;
 }
 
 .searchbar {
-    width: 15% ;
-    /* margin: 1rem; */
-    /* padding: 1rem; */
+  width: 15%;
+  /* margin: 1rem; */
+  /* padding: 1rem; */
 }
 
-.navIcon{
-    /* padding: 1rem; */
+.navIcon {
+  /* padding: 1rem; */
 }
 
 .homeIcon {
-    /* margin-left: 1rem ; */
-    /* padding: 1rem; */
-    /* margin: 0.5rem; */
+  /* margin-left: 1rem ; */
+  /* padding: 1rem; */
+  /* margin: 0.5rem; */
 }
 .accountIcon {
-    /* margin: 0.5rem; */
-    /* margin-left: 1rem ; */
-    /* padding: 1rem; */
+  /* margin: 0.5rem; */
+  /* margin-left: 1rem ; */
+  /* padding: 1rem; */
 }

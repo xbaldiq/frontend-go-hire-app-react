@@ -13,9 +13,9 @@ export default class newCard extends Component {
                     <p className="card-text-description">{this.props.description || 'Fullstack Dev'}</p>
                     <div className="card-project">
                         <img src={totalProject} alt=""/>
-                        <p className="card-text-total-project">{this.props.total_project || '77 Project'}</p>
+                        <p className="card-text-total-project">{this.props.total_project || '77 Project'} Project</p>
                         <img src={successRate} alt=""/>
-                        <p className="card-text-success-rate">{this.props.successrate || '99 Success Rate'}</p>
+                        <p className="card-text-success-rate">{this.props.successrate || '99 Success Rate'}% Success Rate</p>
                     </div>
                     <hr color="grey" width="200"/>
                     <p className="card-text-list-skill">{this.props.skill || 'MySQL, React, PHP, MongoDB, Laravel, Docker'}</p>

@@ -33,12 +33,6 @@ const styles = theme => ({
     height: '100vh'
   },
   background: {
-    // backgroundImage: 'url(https://source.unsplash.com/random)',
-    // backgroundRepeat: 'no-repeat',
-    // backgroundColor:
-    //   theme.palette.type === 'dark' ? theme.palette.grey[900] : theme.palette.grey[50],
-    // backgroundColor: 'orange',
-    // background: rgb(220,17,130),
     background:
       'linear-gradient(108deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 17%, rgba(0,121,135,1) 94%)',
     backgroundSize: 'cover',
@@ -49,7 +43,6 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
-    // flexWarp: 'wrap'
   },
   logo: {
     imageStyle: { width: '50%', height: '50%' }
@@ -111,7 +104,6 @@ class Login extends Component {
     };
 
     if(!(this.state.username && this.state.password)){
-      alert('Username dan password harus diisi')
       this.setState({openSnackbar: true})
     }
     else if (this.state.user_type === 'engineer') {
@@ -125,7 +117,7 @@ class Login extends Component {
           localStorage.setItem('user_type', 'engineer');
           localStorage.setItem('username', res.data.data[0].username);
           
-          this.props.history.push('/');
+          this.props.history.push('/engineer');
         })
         .catch(err => alert('error', err));
     } else if (this.state.user_type === 'company') {
@@ -242,11 +234,6 @@ class Login extends Component {
                 variant='contained'
                 color='primary'
                 className={classes.submit}
-                // onKeyPress={({ key, target }) => {
-                //   if (key === 'Enter') {
-                //     console.log('hello sign in');
-                //   }
-                // }}
                 onClick={this.handleSubmit}
               >
                 Sign In
@@ -257,7 +244,6 @@ class Login extends Component {
                 variant='contained'
                 color='secondary'
                 onClick={() => {
-                  //login dulu trus navigasi
                   this.props.history.push('/register');
                 }}
               >

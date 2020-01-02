@@ -48,7 +48,7 @@ export default class Navbar extends Component {
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
                 name='search_by'
-                value={this.props.search_by}
+                value={this.props.search_by || 'Name'}
                 onChange={this.handleOnChange}
               >
                 <MenuItem value={'name'}>Name</MenuItem>
@@ -61,7 +61,7 @@ export default class Navbar extends Component {
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
                 name='sort_by'
-                value={this.props.sort_by}
+                value={this.props.sort_by || 'Name'}
                 onChange={this.handleOnChange}
               >
                 <MenuItem value={'name'}>Name</MenuItem>
@@ -74,7 +74,7 @@ export default class Navbar extends Component {
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
                 name='limit'
-                value={this.props.limit}
+                value={this.props.limit || 5}
                 onChange={this.handleOnChange}
               >
                 <MenuItem value={'5'}>5</MenuItem>
@@ -95,16 +95,18 @@ export default class Navbar extends Component {
                     this.getAllEngineer();
                   }}
                 ></SortIcon>
-                {this.props.order}
+                {this.props.order || 'ASC'}
               </Button>
-              <Button>
+              {/* <Button>
                 <NotificationsIcon
                   color='primary'
                   fontSize='large'
                   className='homeIcon'
                 />
-              </Button>
-              <Button>
+              </Button> */}
+              <Button onClick={() => {
+                this.props.engineerProfileEditPage();
+              }}>
                 <AccountBoxIcon
                   color='primary'
                   fontSize='large'
@@ -114,7 +116,7 @@ export default class Navbar extends Component {
               </Button>
               <Button
                 onClick={() => {
-                  this.changeLoginStatus();
+                  this.props.changeLoginStatus();
                 }}
               >
                 <MeetingRoomIcon color='primary' fontSize='large' />

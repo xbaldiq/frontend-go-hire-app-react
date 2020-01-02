@@ -34,13 +34,10 @@ export class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.getProfileEngineer = this.getProfileEngineer.bind(this);
     this.getAllEngineer = this.getAllEngineer.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
     this.pagination = this.pagination.bind(this);
-    this.handleClickOpenProfilePage = this.handleClickOpenProfilePage.bind(
-      this
-    );
+    this.handleClickOpenProfilePage = this.handleClickOpenProfilePage.bind(this);
     this.handleCloseProfilePage = this.handleCloseProfilePage.bind(this);
     this.getListProject = this.getListProject.bind(this);
     this.assignProject = this.assignProject.bind(this);
@@ -94,13 +91,11 @@ export class Home extends Component {
 
   componentDidMount() {
     if (this.state.user_type === 'engineer') {
-      this.getProfileEngineer();
+      this.props.history.push('/engineer');
     } else if (this.state.user_type === 'company') {
       this.getAllEngineer({});
       this.getListProject();
     }
-
-
   }
 
   async handleOnChange({ target }) {
@@ -161,35 +156,6 @@ export class Home extends Component {
         await this.setState({ total_page: res.data[0][0].pagination });
         await this.setState({ response: res.data[1] });
         await this.setState({ total_data:res.data[0][0].total_data})
-      })
-      .catch(err => alert('error', err));
-  };
-
-  // Get One Engineer
-  getProfileEngineer = () => {
-    const data = {
-      register: {
-        username: this.state.username,
-        password: this.state.password
-      },
-      url: {
-        engineer: `http://localhost:8000/engineer`,
-        company: `http://localhost:8000/company`
-      },
-      config: {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer `.concat(this.state.token)
-        }
-      }
-    };
-    axios
-      .get(data.url.engineer, data.config)
-      .then(res => {
-        // console.log(res)
-        this.setState({ response: res.data.data });
-        this.setState({ name: res.data.data[0].name });
-        // console.log(this.state.response);
       })
       .catch(err => alert('error', err));
   };
