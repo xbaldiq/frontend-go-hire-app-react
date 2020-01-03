@@ -15,14 +15,14 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import CssBaseline from "@material-ui/core/CssBaseline";
-import './Styles/Navbar.css';
+// import './Styles/Navbar.css';
 
 export default class Navbar extends Component {
 
   render() {
     return (
       <>
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <AppBar position='static' className='appbar'>
           <Toolbar className='toolbar'>
             <img src={Logo} />

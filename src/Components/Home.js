@@ -29,6 +29,9 @@ import './Styles/sweetalert.css';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Pagination from "material-ui-flat-pagination";
 
+import { connect } from 'react-redux';
+import { assignProject } from '../Redux/Actions/Company/Project/assignProject'
+
 
 export class Home extends Component {
   constructor(props) {
@@ -40,7 +43,7 @@ export class Home extends Component {
     this.handleClickOpenProfilePage = this.handleClickOpenProfilePage.bind(this);
     this.handleCloseProfilePage = this.handleCloseProfilePage.bind(this);
     this.getListProject = this.getListProject.bind(this);
-    this.assignProject = this.assignProject.bind(this);
+    // this.assignProject = this.assignProject.bind(this);
     this.handleProjectClick = this.handleProjectClick.bind(this);
   }
 
@@ -81,7 +84,7 @@ export class Home extends Component {
     pagination_config: {},
     projectList: [],
     openProjectAssign: false,
-    clickedId: '',
+    clickedId: 0,
     clickedName: '',
     projectAssignOnClose: '',
     projectSelected: '',
@@ -121,25 +124,24 @@ export class Home extends Component {
   };
 
   // Assign Project
-  assignProject = () => {
-    console.log(this.state.projectSelected);
-    const url = `http://localhost:8000/company/project/assign`;
-    const data = {
-      id_engineer: this.state.clickedId,
-      id_company: this.state.UserId,
-      project_item: this.state.projectSelected
-    };
-    axios
-      .post(url, data, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(res => {
-        alert('success assign');
-      })
-      .catch(err => alert('error', err));
-  };
+  // assignProject = () => {
+  //   const url = `http://localhost:8000/company/project/assign`;
+  //   const data = {
+  //     id_engineer: this.state.clickedId,
+  //     id_company: this.state.UserId,
+  //     name_project: this.state.projectSelected
+  //   };
+  //   axios
+  //     .post(url, data, {
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       } 
+  //     })
+  //     .then(res => {
+  //       alert('success assign');
+  //     })
+  //     .catch(err => alert('error', err));
+  // };
   
   // GetAll Engineer
   getAllEngineer = () => {
@@ -167,7 +169,7 @@ export class Home extends Component {
   };
 
   handleClickOpenProfilePage = (id, name) => {
-    this.setState({ clickedId: id, clickedName: name });
+    // this.setState({ clickedId: id, clickedName: name });
     this.setState({ profilePageOpen: true });
     // this.setState({ profileClicked: true });
   };
@@ -179,7 +181,14 @@ export class Home extends Component {
   handleProjectClick = async value => {
     this.setState({ profilePageOpen: false });
     await this.setState({ projectSelected: value.project_name });
-    this.assignProject();
+    // this.assignProject();
+    await this.props.dispatch(assignProject(
+      {
+      id_engineer: this.state.clickedId,
+      id_company: this.state.UserId,
+      name_project: this.state.projectSelected
+    }
+      ));
   };
 
   render() {
@@ -188,7 +197,7 @@ export class Home extends Component {
     }
     return (
       <>
-      <CssBaseline/>
+      {/* <CssBaseline/> */}
         <SweetAlert
           show={this.state.profileClicked}
           title={this.state.clickedName}
@@ -371,8 +380,8 @@ export class Home extends Component {
           {this.state.response.map(item => {
             return (
               <Button
-                onClick={() => {
-                  this.setState({
+                onClick={async () => {
+                  await this.setState({
                     clickedId: item.id,
                     clickedName: item.name,
                     clickedSkill: item.skill,
@@ -380,6 +389,8 @@ export class Home extends Component {
                     clickedSuccessrate: item.successrate,
                     profileClicked: true
                   });
+                  
+                  console.log('engineerClicked: ',this.state.clickedId);
                 }}
               >
                 <Card
@@ -414,4 +425,12 @@ export class Home extends Component {
     );
   }
 }
-export default Home;
+
+const mapStateToProps = state => {
+  return {
+    // engineerProfile: state.engineerProfile,
+    // engineerSkill: state.engineerSkill
+  };
+};
+
+export default connect(mapStateToProps)(Home);

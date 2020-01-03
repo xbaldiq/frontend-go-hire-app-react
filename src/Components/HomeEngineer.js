@@ -19,6 +19,7 @@ import InputIcon from '@material-ui/icons/Input';
 import { connect } from 'react-redux';
 import { getProjectList } from '../Redux/Actions/engineerProjectList';
 import { getEngineerProfile } from '../Redux/Actions/engineerProfile';
+import { responseProject } from '../Redux/Actions/Engineer/responseProject';
 
 class HomeEngineer extends Component {
   constructor() {
@@ -90,8 +91,9 @@ class HomeEngineer extends Component {
       .catch(err => alert('error', err));
   };
 
-  handleStatusOnClick = (e, name, status) => {
-    this.patchStatusProject(name, status);
+  handleStatusOnClick = async (e, name, status) => {  
+    await this.props.dispatch(responseProject({id: this.state.UserId, name_project:name, status_project:status }));
+    await this.props.dispatch(getProjectList(this.state.UserId));
   };
 
   render() {

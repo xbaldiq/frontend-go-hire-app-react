@@ -22,10 +22,14 @@ import DraftsIcon from '@material-ui/icons/Drafts';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 
 // REDUX
+// import { getEngineerProfile } from '../Redux/Actions/engineerProfile';
+// const getEngineerProfile = require('../Redux/Actions/engineerProfile');
 import { getEngineerProfile } from '../Redux/Actions/engineerProfile';
 import { getEngineerSkill } from '../Redux/Actions/engineerSkill';
+import { mockComponent } from 'react-dom/test-utils';
 
 class EngineerProfileDetail extends Component {
   constructor(props) {
@@ -33,37 +37,166 @@ class EngineerProfileDetail extends Component {
     this.handleEditClick = this.handleEditClick.bind(this);
   }
   componentDidMount = async () => {
+    console.log('didmount')
     await this.props.dispatch(
-      getEngineerProfile(localStorage.getItem('Token'))
+      getEngineerProfile.getEngineerProfile(localStorage.getItem('Token'))
     );
     await this.props.dispatch(getEngineerSkill(localStorage.getItem('Token')));
 
-    // this.setState({nameRef: this.props.engineerProfile.engineerProfile.name })
+    this.setState({
+      defaultProfile: this.props.engineerProfile.engineerProfile,
+      defaultSkill: this.props.engineerSkill.engineerSkillList,
+      refSkill: this.props.engineerSkill.engineerSkillList
+    });
+    console.log('default skill',this.state.defaultSkill)
   };
 
   state = {
-    nameRef: this.props.engineerProfile.engineerProfile.name,
-    // editName: ''
+    // nameRef: this.props.engineerProfile.engineerProfile.name,
+    onChangeTrigger: false,
+    onChangeSkillTrigger: false,
+    nameDefault: '',
+    refSkill: [
 
-    // name = this.props.engineerProfile.engineerProfile.name
-  };
+    ],
+    defaultSkill: [
+      {
+        no: 0,
+        id: 0,
+        skill_no: 0,
+        skill_item: ''
+      }
+    ],
+    defaultProfile: {}
+  };  
 
   showSkill = data => {
     this.render(<TableCell>data</TableCell>);
   };
 
-  handleEditClick = (e, value) => {
-    // console.log(e.target.id);  
-    console.log(value);
+  handleEditClick = e => {
+    // console.log('target: ', e.target.name);
+    console.log(e.target.value);
     // this.patchStatusProject(name, value);
+    this.setState({ defaultProfile: e.target.value });
+    this.setState({ onChangeTrigger: true });
+  };
+
+  handleOnChangeSkill = e => {
+    this.setState({ defaultSkill: e.target.value });
+    this.setState({ onChangeSkillTrigger: true });
+  };
+
+  showApplyButton = () => {
+    return (
+      <>
+        <Button
+          onClick={e => {
+            // send patch
+          }}
+        >
+          Apply
+        </Button>
+
+        <Button
+          onClick={e => {
+            this.setState({ onChangeTrigger: false });
+            this.setState({
+              defaultProfile: this.props.engineerProfile.engineerProfile
+            });
+          }}
+        >
+          Cancel
+        </Button>
+      </>
+    );
+  };
+
+  disableApplyButton = () => {
+    return (
+      <>
+        <Button
+          disabled
+          onClick={e => {
+            // send patch
+          }}
+        >
+          Apply
+        </Button>
+
+        <Button
+          disabled
+          onClick={e => {
+            this.setState({ onChangeTrigger: false });
+            this.setState({
+              defaultProfile: this.props.engineerProfile.engineerProfile
+            });
+          }}
+        >
+          Cancel
+        </Button>
+      </>
+    );
+  };
+
+  showApplySkillButton = () => {
+    return (
+      <>
+        <Button
+          onClick={e => {
+            // send patch
+          }}
+        >
+          Apply
+        </Button>
+
+        <Button
+          onClick={e => {
+            this.setState({ onChangeSkillTrigger: false });
+            this.setState({
+              defaultSkill: this.props.engineerSkill.engineerSkillList
+            });
+          }}
+        >
+          Cancel
+        </Button>
+      </>
+    );
+  };
+
+  disableApplySkillButton = () => {
+    return (
+      <>
+        <Button
+          disabled
+          onClick={e => {
+            // send patch
+          }}
+        >
+          Apply
+        </Button>
+
+        <Button
+          disabled
+          onClick={e => {
+            this.setState({ onChangeTriggerSkill: false });
+            this.setState({
+              defaulSkill: this.props.engineerSkill.engineerSkillList
+            });
+          }}
+        >
+          Cancel
+        </Button>
+      </>
+    );
   };
 
   render() {
     const { engineerProfile } = this.props.engineerProfile;
     const { engineerSkillList } = this.props.engineerSkill;
 
-    // this.setState({editName: engineerProfile.name})
-    // console.log(this.props.engineerSkill.engineerSkillList);
+    console.log(this.state.defaultSkill);
+    console.log('render')
 
     return (
       <>
@@ -76,7 +209,7 @@ class EngineerProfileDetail extends Component {
           container
           direction='row'
           justify='center'
-          alignItems='center'
+          alignItems='flex-start'
           spacing={4}
           style={{ paddingTop: '1.5rem' }}
         >
@@ -91,80 +224,83 @@ class EngineerProfileDetail extends Component {
             />
           </Grid>
 
-          <Grid item xs={5}>
+          <Grid item md={5} xs={5}>
             <Paper>
               <List component='nav' aria-label='main mailbox folders'>
                 {/* NAME */}
                 <ListItem>
                   <ListItemText secondary='Name' />
-                  <TextField value={engineerProfile.name} placeholder={engineerProfile.name}/>
-                  {/* <ListItemText primary={engineerProfile.name} /> */}
-                  <ListItemIcon>
-                    {/* <Button
-                      // onClick={() => this.handleEditClick()}
-                    >
-                      <EditIcon htmlColor='darkGrey' />
-                    </Button> */}
-                  </ListItemIcon>
+                  <TextField
+                    value={this.state.defaultProfile.name}
+                    name='name'
+                    onChange={this.handleEditClick}
+                  />
+                  <ListItemIcon></ListItemIcon>
+                </ListItem>
+
+                {/* DESCRIPTION */}
+                <ListItem>
+                  <ListItemText secondary='Name' />
+                  <TextField
+                    value={this.state.defaultProfile.description}
+                    name='description'
+                    onChange={this.handleEditClick}
+                  />
+                  <ListItemIcon></ListItemIcon>
                 </ListItem>
 
                 <ListItem>
-                  <ListItemText secondary='Description' />
-                  <ListItemText primary={engineerProfile.description} />
-                  <ListItemIcon>
-                    <Button>
-                      <EditIcon htmlColor='darkGrey' />
-                    </Button>
-                  </ListItemIcon>
-                </ListItem>
-
-                <ListItem>
-                  <ListItemText secondary='Location' />
-                  <ListItemText primary={engineerProfile.location} />
-                  <ListItemIcon>
-                    <Button>
-                      <EditIcon htmlColor='darkGrey' />
-                    </Button>
-                  </ListItemIcon>
+                  <ListItemText secondary='location' />
+                  <TextField
+                    value={this.state.defaultProfile.location}
+                    name='location'
+                    onChange={this.handleEditClick}
+                  />
+                  <ListItemIcon></ListItemIcon>
                 </ListItem>
 
                 <ListItem>
                   <ListItemText secondary='Date of Birth' />
-                  <ListItemText primary={engineerProfile.dateofbirth} />
-                  <ListItemIcon>
-                    <Button>
-                      <EditIcon htmlColor='darkGrey' />
-                    </Button>
-                  </ListItemIcon>
-                </ListItem>
-
-                <ListItem>
-                  <ListItemText secondary='Date of Created' />
-                  <ListItemText
-                    align='left'
-                    primary={engineerProfile.datecreated}
+                  <TextField
+                    value={this.state.defaultProfile.dateofbirth}
+                    disabled
+                    name='dateofbirth'
+                    type='text'
                   />
-                  <ListItemIcon>
-                    <Button>
-                      <EditIcon htmlColor='transparent' />
-                    </Button>
-                  </ListItemIcon>
+                  <ListItemIcon></ListItemIcon>
                 </ListItem>
 
                 <ListItem>
-                  <ListItemText secondary='Date of Updated' />
-                  <ListItemText primary={engineerProfile.dateupdated} />
-                  <ListItemIcon>
-                    <Button>
-                      <EditIcon htmlColor='transparent' />
-                    </Button>
-                  </ListItemIcon>
+                  <ListItemText secondary='Date Created' />
+                  <TextField
+                    disabled
+                    value={this.state.defaultProfile.datecreated}
+                    name='datecreated'
+                  />
+                  <ListItemIcon></ListItemIcon>
+                </ListItem>
+
+                <ListItem>
+                  <ListItemText secondary='Date Updated' />
+                  <TextField
+                    disabled
+                    value={this.state.defaultProfile.dateupdated}
+                    name='dateupdated'
+                  />
+                  <ListItemIcon></ListItemIcon>
+                </ListItem>
+
+                <Divider />
+                <ListItem alignItems='flex-end'>
+                  {this.state.onChangeTrigger
+                    ? this.showApplyButton()
+                    : this.disableApplyButton()}
                 </ListItem>
               </List>
             </Paper>
           </Grid>
 
-          <Grid item xs={5}>
+          <Grid item md={4} xs={4}>
             <Paper>
               <TableContainer
                 className='table-container'
@@ -176,24 +312,37 @@ class EngineerProfileDetail extends Component {
                     <TableRow>
                       <TableCell align='left'>No</TableCell>
                       <TableCell align='left'>Skill</TableCell>
-                      <TableCell align='center'>Action</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {engineerSkillList.map((skill, index) => (
+                    {this.state.refSkill.map((skill, index) => (
+
                       <TableRow key={index}>
-                        <TableCell>{skill.skill_no}</TableCell>
-                        <TableCell>{skill.skill_item}</TableCell>
-                        <TableCell align='center'>
+                        <TableCell align='left'>{skill.skill_no}</TableCell>
+
+                        <TableCell align='left'>
+                          <TextField
+                            value={this.state.defaultSkill[index].skill_item  }
+                            onChange={this.handleOnChangeSkill}
+                          />
+                        </TableCell>
+                        {/* <TableCell align='center'>
                           <Button>
                             <EditIcon htmlColor='darkGrey' />
                           </Button>
                           <Button>
                             <DeleteIcon htmlColor='darkGrey' />
                           </Button>
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     ))}
+                    <TableRow key={'btn'}>
+                      <TableCell align='center'>
+                        {this.state.onChangeSkillTrigger
+                          ? this.showApplySkillButton()
+                          : this.disableApplySkillButton()}
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </TableContainer>
