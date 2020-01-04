@@ -13,8 +13,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import CssBaseline from "@material-ui/core/CssBaseline";
 // import './Styles/Navbar.css';
 
 export default class Navbar extends Component {
@@ -105,7 +103,7 @@ export default class Navbar extends Component {
                 />
               </Button> */}
               <Button onClick={() => {
-                this.props.engineerProfileEditPage();
+                this.props.profilePage();
               }}>
                 <AccountBoxIcon
                   color='primary'
@@ -116,7 +114,7 @@ export default class Navbar extends Component {
               </Button>
               <Button
                 onClick={() => {
-                  this.props.changeLoginStatus();
+                  this.props.logout();
                 }}
               >
                 <MeetingRoomIcon color='primary' fontSize='large' />

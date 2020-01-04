@@ -26,12 +26,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import SweetAlert from 'sweetalert-react';
 import './Styles/Navbar.css';
 import './Styles/sweetalert.css';
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Pagination from "material-ui-flat-pagination";
-
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Pagination from 'material-ui-flat-pagination';
+import Navbar from './Navbar';
 import { connect } from 'react-redux';
-import { assignProject } from '../Redux/Actions/Company/Project/assignProject'
-
+import { assignProject } from '../Redux/Actions/Company/Project/assignProject';
 
 export class Home extends Component {
   constructor(props) {
@@ -40,10 +39,11 @@ export class Home extends Component {
     this.getAllEngineer = this.getAllEngineer.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
     this.pagination = this.pagination.bind(this);
-    this.handleClickOpenProfilePage = this.handleClickOpenProfilePage.bind(this);
+    this.handleClickOpenProfilePage = this.handleClickOpenProfilePage.bind(
+      this
+    );
     this.handleCloseProfilePage = this.handleCloseProfilePage.bind(this);
     this.getListProject = this.getListProject.bind(this);
-    // this.assignProject = this.assignProject.bind(this);
     this.handleProjectClick = this.handleProjectClick.bind(this);
   }
 
@@ -51,7 +51,7 @@ export class Home extends Component {
     await this.setState({ offset });
     await this.setState({ page });
     this.getAllEngineer();
-  }
+  };
 
   pagination = (data, page, limit) => {
     let trimStart = (page - 1) * limit;
@@ -89,15 +89,16 @@ export class Home extends Component {
     projectAssignOnClose: '',
     projectSelected: '',
     profileClicked: false,
-    offset: 0,
+    offset: 0
   };
 
   componentDidMount() {
     if (this.state.user_type === 'engineer') {
       this.props.history.push('/engineer');
     } else if (this.state.user_type === 'company') {
-      this.getAllEngineer({});
+      this.getAllEngineer({});  
       this.getListProject();
+      // this.props.history.push('/company');
     }
   }
 
@@ -114,7 +115,8 @@ export class Home extends Component {
     axios
       .get(url, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: `Bearer `.concat(this.state.token)
         }
       })
       .then(res => {
@@ -123,26 +125,6 @@ export class Home extends Component {
       .catch(err => alert('error', err));
   };
 
-  // Assign Project
-  // assignProject = () => {
-  //   const url = `http://localhost:8000/company/project/assign`;
-  //   const data = {
-  //     id_engineer: this.state.clickedId,
-  //     id_company: this.state.UserId,
-  //     name_project: this.state.projectSelected
-  //   };
-  //   axios
-  //     .post(url, data, {
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       } 
-  //     })
-  //     .then(res => {
-  //       alert('success assign');
-  //     })
-  //     .catch(err => alert('error', err));
-  // };
-  
   // GetAll Engineer
   getAllEngineer = () => {
     const url2 = `http://localhost:8000/engineer?sort=${this.state.sort_by}&order=${this.state.order}&page=${this.state.page}&limit=${this.state.limit}&${this.state.search_by}=${this.state.search}`;
@@ -153,11 +135,11 @@ export class Home extends Component {
           Authorization: `Bearer `.concat(this.state.token)
         }
       })
-      .then ( async res => {
+      .then(async res => {
         await this.setState({ pagination_config: res.data[0][0] });
         await this.setState({ total_page: res.data[0][0].pagination });
         await this.setState({ response: res.data[1] });
-        await this.setState({ total_data:res.data[0][0].total_data})
+        await this.setState({ total_data: res.data[0][0].total_data });
       })
       .catch(err => alert('error', err));
   };
@@ -182,13 +164,17 @@ export class Home extends Component {
     this.setState({ profilePageOpen: false });
     await this.setState({ projectSelected: value.project_name });
     // this.assignProject();
-    await this.props.dispatch(assignProject(
-      {
-      id_engineer: this.state.clickedId,
-      id_company: this.state.UserId,
-      name_project: this.state.projectSelected
-    }
-      ));
+    await this.props.dispatch(
+      assignProject({
+        id_engineer: this.state.clickedId,
+        id_company: this.state.UserId,
+        name_project: this.state.projectSelected
+      },this.state.token)
+    );
+  };
+
+  profilePage = () => {
+    this.props.history.push('/company/profile');
   };
 
   render() {
@@ -197,7 +183,12 @@ export class Home extends Component {
     }
     return (
       <>
-      {/* <CssBaseline/> */}
+        <CssBaseline/>
+        {/* <Navbar
+          name={this.state.username}
+          changeLoginStatus={this.changeLoginStatus}
+          engineerProfileEditPage={this.engineerProfileEditPage.bind(this)}
+        /> */}
         <SweetAlert
           show={this.state.profileClicked}
           title={this.state.clickedName}
@@ -231,7 +222,6 @@ export class Home extends Component {
           </DialogTitle>
           <List>
             {this.state.projectList.map((item, id) => (
-              // <ListItem button onClick={() => handleProjectClick(email)} key={email}>
               <ListItem
                 button
                 key={id}
@@ -335,7 +325,9 @@ export class Home extends Component {
                   className='homeIcon'
                 />
               </Button>
-              <Button>
+              <Button onClick={() => {
+                  this.profilePage()
+              }}>
                 <AccountBoxIcon
                   color='primary'
                   fontSize='large'
@@ -360,15 +352,16 @@ export class Home extends Component {
           justify='space-evenly'
           alignItems='center'
           spacing={3}
-          style={{paddingTop: '1.5rem'}}
-        > 
-        <Pagination
-          limit={this.state.limit}
-          offset={this.state.offset}
-          total={this.state.total_data} 
-          onClick={(e, offset, page) => {
-            this.handleClickPagination(offset, page)}}
-        />
+          style={{ paddingTop: '1.5rem' }}
+        >
+          <Pagination
+            limit={this.state.limit}
+            offset={this.state.offset}
+            total={this.state.total_data}
+            onClick={(e, offset, page) => {
+              this.handleClickPagination(offset, page);
+            }}
+          />
         </Grid>
         <Grid
           container
@@ -389,8 +382,8 @@ export class Home extends Component {
                     clickedSuccessrate: item.successrate,
                     profileClicked: true
                   });
-                  
-                  console.log('engineerClicked: ',this.state.clickedId);
+
+                  console.log('engineerClicked: ', this.state.clickedId);
                 }}
               >
                 <Card
@@ -403,7 +396,6 @@ export class Home extends Component {
               </Button>
             );
           })}
-          
         </Grid>
         <Grid
           container
@@ -411,15 +403,16 @@ export class Home extends Component {
           justify='space-evenly'
           alignItems='center'
           spacing={3}
-          style={{paddingTop: '1.5rem'}}
-        > 
-        <Pagination
-          limit={this.state.limit}
-          offset={this.state.offset}
-          total={this.state.total_data} 
-          onClick={(e, offset, page) => {
-            this.handleClickPagination(offset, page)}}
-        />
+          style={{ paddingTop: '1.5rem' }}
+        >
+          <Pagination
+            limit={this.state.limit}
+            offset={this.state.offset}
+            total={this.state.total_data}
+            onClick={(e, offset, page) => {
+              this.handleClickPagination(offset, page);
+            }}
+          />
         </Grid>
       </>
     );

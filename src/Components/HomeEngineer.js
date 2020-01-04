@@ -15,16 +15,14 @@ import './Styles/HomeEngineer.css';
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import Button from '@material-ui/core/Button';
-import InputIcon from '@material-ui/icons/Input';
 import { connect } from 'react-redux';
-import { getProjectList } from '../Redux/Actions/engineerProjectList';
-import { getEngineerProfile } from '../Redux/Actions/engineerProfile';
+import { getProjectList } from '../Redux/Actions/Engineer/engineerProjectList';
+import { getEngineerProfile } from '../Redux/Actions/Engineer/engineerProfile';
 import { responseProject } from '../Redux/Actions/Engineer/responseProject';
 
 class HomeEngineer extends Component {
   constructor() {
     super();
-    // this.getProject = this.getProject.bind(this);
     this.handleStatusOnClick = this.handleStatusOnClick.bind(this);
   }
 
@@ -35,61 +33,22 @@ class HomeEngineer extends Component {
     username: localStorage.getItem('username'),
     engReceivedProject: [],
     name: ''
-    // id: 252,
   };
 
   componentDidMount = async () => {
-    // this.getProfileEngineer();
     await this.props.dispatch(getProjectList(this.state.UserId));
     await this.props.dispatch(getEngineerProfile(this.state.token));
-    // this.props.getProjectList();
   };
 
-  changeLoginStatus = () => {
+  logout = () => {
     this.setState({ token: '' });
     localStorage.clear();
   };
 
-  engineerProfileEditPage = () => {
+  profilePage = () => {
     this.props.history.push('/engineer/profile');
   };
 
-  // getProject = () => {
-  //   const url = `http://localhost:8000/engineer/project/`;
-  //   axios
-  //     .get(url, {
-  //       params: {
-  //         id: this.state.UserId
-  //       },
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //         //   Authorization: `Bearer `.concat(this.state.token)
-  //       }
-  //     })
-  //     .then(engReceivedProject => {
-  //       // console.log(JSON.stringify(engReceivedProject.data))
-  //       this.setState({ engReceivedProject: engReceivedProject.data });
-  //     })
-  //     .catch(err => alert('error', err));
-  // };
-
-  patchStatusProject = (name_project, status_project) => {
-    const url = `http://localhost:8000/engineer/project/`;
-    axios
-      .patch(url, null, {
-        params: {
-          id: this.state.UserId,
-          name_project,
-          status_project
-        },
-        headers: {
-          'Content-Type': 'application/json'
-          //   Authorization: `Bearer `.concat(this.state.token)
-        }
-      })
-      .then(engReceivedProject => {})
-      .catch(err => alert('error', err));
-  };
 
   handleStatusOnClick = async (e, name, status) => {  
     await this.props.dispatch(responseProject({id: this.state.UserId, name_project:name, status_project:status }));
@@ -97,7 +56,6 @@ class HomeEngineer extends Component {
   };
 
   render() {
-    // console.log('engineerProfile', this.props.engineerProfile.engineerProfile.data[0])
 
     const { engineerProfile } = this.props.engineerProfile;
 
@@ -110,8 +68,8 @@ class HomeEngineer extends Component {
         <CssBaseline />
         <Navbar
           name={engineerProfile.name}
-          changeLoginStatus={this.changeLoginStatus}
-          engineerProfileEditPage={this.engineerProfileEditPage.bind(this)}
+          logout={this.logout}
+          profilePage={this.profilePage.bind(this)}
         />
 
         {/* <Grid container direction='column' justify="space-around" alignItems='center' sm={12}> */}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Navbar from './Navbar';
 import Card from './Card';
 import { connect } from 'react-redux';
-
+import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -23,23 +23,24 @@ import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
-
+import SendIcon from '@material-ui/icons/Send';
 // REDUX
-// import { getEngineerProfile } from '../Redux/Actions/engineerProfile';
-// const getEngineerProfile = require('../Redux/Actions/engineerProfile');
-import { getEngineerProfile } from '../Redux/Actions/engineerProfile';
-import { getEngineerSkill } from '../Redux/Actions/engineerSkill';
-import { mockComponent } from 'react-dom/test-utils';
+import { getEngineerProfile } from '../Redux/Actions/Engineer/engineerProfile';
+import { patchEngineerProfile } from '../Redux/Actions/Engineer/engineerEditProfile';
+import { patchEngineerSkill } from '../Redux/Actions/Engineer/engineerEditSkill';
+import { getEngineerSkill } from '../Redux/Actions/Engineer/engineerSkill';
+import { postEngineerSkill } from '../Redux/Actions/Engineer/engineerSkill';
+import { deleteEngineerSkill } from '../Redux/Actions/Engineer/engineerSkill';
 
 class EngineerProfileDetail extends Component {
   constructor(props) {
     super(props);
-    this.handleEditClick = this.handleEditClick.bind(this);
+    this.onChangeBio = this.onChangeBio.bind(this);
   }
   componentDidMount = async () => {
-    console.log('didmount')
+    console.log('didmount');
     await this.props.dispatch(
-      getEngineerProfile.getEngineerProfile(localStorage.getItem('Token'))
+      getEngineerProfile(localStorage.getItem('Token'))
     );
     await this.props.dispatch(getEngineerSkill(localStorage.getItem('Token')));
 
@@ -48,17 +49,23 @@ class EngineerProfileDetail extends Component {
       defaultSkill: this.props.engineerSkill.engineerSkillList,
       refSkill: this.props.engineerSkill.engineerSkillList
     });
-    console.log('default skill',this.state.defaultSkill)
+
+    const skillLength = this.state.defaultSkill.length;
+
+    console.log('skillLength', skillLength);
+    console.log('end didmount');
   };
 
   state = {
-    // nameRef: this.props.engineerProfile.engineerProfile.name,
+    token: localStorage.getItem('Token'),
     onChangeTrigger: false,
-    onChangeSkillTrigger: false,
-    nameDefault: '',
-    refSkill: [
-
+    onChangeSkillTriggerArray: [
+      {
+        onChangeSkill: false
+      }
     ],
+    nameDefault: '',
+    refSkill: [],
     defaultSkill: [
       {
         no: 0,
@@ -67,65 +74,81 @@ class EngineerProfileDetail extends Component {
         skill_item: ''
       }
     ],
-    defaultProfile: {}
-  };  
-
-  showSkill = data => {
-    this.render(<TableCell>data</TableCell>);
+    defaultProfile: {},
+    changedSkill: {}
   };
 
-  handleEditClick = e => {
-    // console.log('target: ', e.target.name);
-    console.log(e.target.value);
-    // this.patchStatusProject(name, value);
-    this.setState({ defaultProfile: e.target.value });
+  onChangeBio = e => {
+    // console.log('value', e.target.value);
+    // console.log('key', e.target.name);
+    const val = e.target.value;
+    const key = e.target.name;
+    this.setState(prevState => ({
+      defaultProfile: {
+        ...prevState.defaultProfile,
+        [key]: val
+      }
+    }));
     this.setState({ onChangeTrigger: true });
+
+    console.log(this.state.defaultProfile);
   };
 
-  handleOnChangeSkill = e => {
-    this.setState({ defaultSkill: e.target.value });
-    this.setState({ onChangeSkillTrigger: true });
+  onChangeSkill = async e => {
+    let index = e.target.id;
+    const value = e.target.value;
+
+    this.setState(prevState => ({
+      changedSkill: {
+        ...prevState.changedSkill,
+        skill_no: parseInt(index) + 1,
+        skill_item: value
+      }
+    }));
+
+    const defaultSkill = [...this.state.defaultSkill];
+    defaultSkill[index] = { ...defaultSkill[index], skill_item: value };
+    this.setState({ defaultSkill });
+
+    const onChangeSkillTriggerArray = [...this.state.onChangeSkillTriggerArray];
+    onChangeSkillTriggerArray[index] = {
+      ...onChangeSkillTriggerArray[index],
+      onChangeSkill: true
+    };
+    await this.setState({ onChangeSkillTriggerArray });
+
+    console.log(this.state.onChangeSkillTriggerArray[index].onChangeSkill);
+  };
+
+  onChange = e => {
+    this.setState({ [e.target.id || e.target.name]: e.target.value });
   };
 
   showApplyButton = () => {
     return (
       <>
         <Button
-          onClick={e => {
-            // send patch
-          }}
-        >
-          Apply
-        </Button>
-
-        <Button
-          onClick={e => {
+          onClick={async e => {
+            await this.props
+              .dispatch(
+                patchEngineerProfile(
+                  this.state.defaultProfile,
+                  localStorage.getItem('Token')
+                )
+              )
+              .then(res => {
+                alert('Updating bio success');
+              });
             this.setState({ onChangeTrigger: false });
-            this.setState({
-              defaultProfile: this.props.engineerProfile.engineerProfile
-            });
-          }}
-        >
-          Cancel
-        </Button>
-      </>
-    );
-  };
-
-  disableApplyButton = () => {
-    return (
-      <>
-        <Button
-          disabled
-          onClick={e => {
-            // send patch
+            await this.props.dispatch(
+              getEngineerProfile(localStorage.getItem('Token'))
+            );
           }}
         >
           Apply
         </Button>
 
         <Button
-          disabled
           onClick={e => {
             this.setState({ onChangeTrigger: false });
             this.setState({
@@ -143,16 +166,31 @@ class EngineerProfileDetail extends Component {
     return (
       <>
         <Button
-          onClick={e => {
-            // send patch
-          }}
+        //   onClick={ async e => {
+        //     await this.props.dispatch(patchEngineerProfile(this.state.defaultProfile,localStorage.getItem('Token')))
+        //     .then((res) => {
+        //       alert('Updating bio success')
+        //     })
+        //     this.setState({ onChangeTrigger: false });
+        //     await this.props.dispatch(
+        //       getEngineerProfile(localStorage.getItem('Token'))
+        //     );
+        //   }
+        // }
         >
           Apply
         </Button>
 
         <Button
           onClick={e => {
-            this.setState({ onChangeSkillTrigger: false });
+            const onChangeSkillTriggerArray = [
+              ...this.state.onChangeSkillTriggerArray
+            ];
+            onChangeSkillTriggerArray[0] = {
+              ...onChangeSkillTriggerArray[0],
+              onChangeSkill: false
+            };
+            this.setState({ onChangeSkillTriggerArray });
             this.setState({
               defaultSkill: this.props.engineerSkill.engineerSkillList
             });
@@ -164,46 +202,57 @@ class EngineerProfileDetail extends Component {
     );
   };
 
-  disableApplySkillButton = () => {
-    return (
-      <>
-        <Button
-          disabled
-          onClick={e => {
-            // send patch
-          }}
-        >
-          Apply
-        </Button>
-
-        <Button
-          disabled
-          onClick={e => {
-            this.setState({ onChangeTriggerSkill: false });
-            this.setState({
-              defaulSkill: this.props.engineerSkill.engineerSkillList
-            });
-          }}
-        >
-          Cancel
-        </Button>
-      </>
-    );
+  logout = () => {
+    this.setState({ token: '' });
+    localStorage.clear();
   };
 
+  profilePage = () => {
+    // this.props.history.push('/engineer/profile');
+  };
+
+  deleteSkill = (deletedSkill) => {
+    
+    this.props.dispatch(deleteEngineerSkill(deletedSkill,localStorage.getItem('Token'))).then(res => {
+      // alert(`success deleted ${deletedSkill}`)
+      alert(res)
+    })
+  };
+
+  onClickInsertSkill = async () => {
+    await this.props
+      .dispatch(
+        postEngineerSkill(
+          this.state.defaultSkill.length + 1,
+          this.state.newSkill,
+          localStorage.getItem('Token')
+        )
+      )
+      .then(() => {
+        alert(`Success insert ${this.state.newSkill}`);
+        this.setState({ newSkill: '' });
+      });
+  };
   render() {
+    console.log(this.state.onChangeSkillTriggerArray[0].onChangeSkill);
+
     const { engineerProfile } = this.props.engineerProfile;
     const { engineerSkillList } = this.props.engineerSkill;
 
     console.log(this.state.defaultSkill);
-    console.log('render')
+    console.log('render');
+
+    if (!this.state.token) {
+      this.props.history.push('/login');
+    }
 
     return (
       <>
+        <CssBaseline />
         <Navbar
           name={engineerProfile.name}
-          changeLoginStatus={this.changeLoginStatus}
-          engineerProfileEditPage={this.engineerProfileEditPage}
+          logout={this.logout}
+          profilePage={this.profilePage.bind(this)}
         />
         <Grid
           container
@@ -233,18 +282,18 @@ class EngineerProfileDetail extends Component {
                   <TextField
                     value={this.state.defaultProfile.name}
                     name='name'
-                    onChange={this.handleEditClick}
+                    onChange={this.onChangeBio}
                   />
                   <ListItemIcon></ListItemIcon>
                 </ListItem>
 
                 {/* DESCRIPTION */}
                 <ListItem>
-                  <ListItemText secondary='Name' />
+                  <ListItemText secondary='Description' />
                   <TextField
                     value={this.state.defaultProfile.description}
                     name='description'
-                    onChange={this.handleEditClick}
+                    onChange={this.onChangeBio}
                   />
                   <ListItemIcon></ListItemIcon>
                 </ListItem>
@@ -254,7 +303,7 @@ class EngineerProfileDetail extends Component {
                   <TextField
                     value={this.state.defaultProfile.location}
                     name='location'
-                    onChange={this.handleEditClick}
+                    onChange={this.onChangeBio}
                   />
                   <ListItemIcon></ListItemIcon>
                 </ListItem>
@@ -300,47 +349,80 @@ class EngineerProfileDetail extends Component {
             </Paper>
           </Grid>
 
-          <Grid item md={4} xs={4}>
+          <Grid item md={3} xs={5}>
             <Paper>
               <TableContainer
                 className='table-container'
+                alignItems=''
                 component={Paper}
                 direction='column'
               >
                 <Table aria-label='simple table'>
                   <TableHead>
                     <TableRow>
-                      <TableCell align='left'>No</TableCell>
-                      <TableCell align='left'>Skill</TableCell>
+                      <TableCell align='left' width='10%'>
+                        No
+                      </TableCell>
+                      <TableCell align='left' width='100%'>
+                        Skill
+                      </TableCell>
+                      <TableCell align='center'>Action</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {this.state.refSkill.map((skill, index) => (
-
                       <TableRow key={index}>
-                        <TableCell align='left'>{skill.skill_no}</TableCell>
-
+                        <TableCell align='left'>{index + 1}</TableCell>
                         <TableCell align='left'>
                           <TextField
-                            value={this.state.defaultSkill[index].skill_item  }
-                            onChange={this.handleOnChangeSkill}
+                            id={index}
+                            value={this.state.defaultSkill[index].skill_item}
+                            onChange={this.onChangeSkill}
                           />
                         </TableCell>
-                        {/* <TableCell align='center'>
+
+                        <TableCell align='center'>
                           <Button>
                             <EditIcon htmlColor='darkGrey' />
                           </Button>
-                          <Button>
+                          <Button onClick={ () => {
+                            this.deleteSkill(skill.skill_no)
+                            // console.log('delete skill no', skill.skill_no)
+                          }}>
                             <DeleteIcon htmlColor='darkGrey' />
                           </Button>
-                        </TableCell> */}
+                        </TableCell>
                       </TableRow>
                     ))}
                     <TableRow key={'btn'}>
-                      <TableCell align='center'>
-                        {this.state.onChangeSkillTrigger
+                      {/* <TableCell> </TableCell> */}
+                      <TableCell align='center' colSpan={3}>
+                        {this.state.onChangeSkillTriggerArray[0].onChangeSkill
                           ? this.showApplySkillButton()
                           : this.disableApplySkillButton()}
+                      </TableCell>
+                      {/* <TableCell> </TableCell> */}
+                    </TableRow>
+                    <TableRow>
+                      <TableCell colSpan={2} >
+                        <TextField
+                          fullWidth
+                          variant='outlined'
+                          margin='normal'
+                          id='newSkill'
+                          label='Add New Skill'
+                          name='newSkill'
+                          value={this.state.newSkill}
+                          onChange={this.onChange}
+                        />
+                      </TableCell>
+                      <TableCell colSpan={1}>
+                        <Button onClick={this.onClickInsertSkill}>
+                          <SendIcon
+                            fontSize='large'
+                            style={{ marginLeft: '1rem' }}
+                          />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -352,6 +434,54 @@ class EngineerProfileDetail extends Component {
       </>
     );
   }
+
+  disableApplyButton = () => {
+    return (
+      <>
+        <Button disabled onClick={e => {}}>
+          Apply
+        </Button>
+
+        <Button
+          disabled
+          onClick={e => {
+            this.setState({ onChangeTrigger: false });
+            this.setState({
+              defaultProfile: this.props.engineerProfile.engineerProfile
+            });
+          }}
+        >
+          Cancel
+        </Button>
+      </>
+    );
+  };
+  disableApplySkillButton = () => {
+    return (
+      <>
+        <Button
+          disabled
+          onClick={e => {
+            // send patch
+          }}
+        >
+          Apply
+        </Button>
+
+        <Button
+          disabled
+          onClick={e => {
+            // this.setState({ onChangeTriggerSkill: false });
+            // this.setState({
+            //   defaulSkill: this.props.engineerSkill.engineerSkillList
+            // });
+          }}
+        >
+          Cancel
+        </Button>
+      </>
+    );
+  };
 }
 
 const mapStateToProps = state => {

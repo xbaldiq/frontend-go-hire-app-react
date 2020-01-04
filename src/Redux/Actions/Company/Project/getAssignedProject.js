@@ -1,10 +1,11 @@
 import Axios from 'axios';
 
-const URL_STRING = 'http://localhost:8000/engineer/skill';
+const URL_STRING = 'http://localhost:8000/company/project/assign';
 
-export const getEngineerSkill = (token) => {
+export const getAssignedProject = (token) => {
+  // console.log('')
   return {
-    type: 'GET_ENG_SKILL',
+    type: 'COM_GET_ASSIGNED_PROJECT_LIST',
     payload: Axios.get(URL_STRING, {
       headers: {
         'Content-Type': 'application/json',
