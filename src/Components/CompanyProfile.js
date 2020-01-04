@@ -43,14 +43,27 @@ class CompanyProfile extends Component {
       .dispatch(getAssignedProject(this.state.token))
   };
 
+  logout = () => {
+    this.setState({ token: '' });
+    localStorage.clear();
+  };
+
+  profilePage = () => {
+    this.props.history.push('/company/detail');
+  };
+
   render() {
+
+    if (!this.state.token) {
+      this.props.history.push('/login');
+    }
     return (
       <>
         <CssBaseline />
         <Navbar
-        // name={engineerProfile.name}
-        // logout={this.logout}
-        // profilePage={this.profilePage.bind(this)}
+        name={this.state.username}
+        logout={this.logout}
+        profilePage={this.profilePage}
         />
         {/* <Grid container justify='center' alignItems='center' style={{paddingTop: '1.5rem'}}>
           <Typography variant='h3' gutterBottom>

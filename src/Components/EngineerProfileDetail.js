@@ -91,7 +91,7 @@ class EngineerProfileDetail extends Component {
     }));
     this.setState({ onChangeTrigger: true });
 
-    console.log(this.state.defaultProfile);
+    // console.log(this.state.defaultProfile);
   };
 
   onChangeSkill = async e => {

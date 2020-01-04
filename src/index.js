@@ -9,6 +9,7 @@ import Register from './Components/Register';
 import HomeCompany from './Components/HomeCompany';
 import EngProfileDetail from './Components/EngineerProfileDetail';
 import CompanyProfile from './Components/CompanyProfile';
+import CompanyDetail from './Components/CompanyDetail.js';
 import Home from './Components/Home';
 import Card from './Components/Card';
 import HomeEngineer from './Components/HomeEngineer';
@@ -24,6 +25,7 @@ const AppWithRoute = () => {
         <Route path='/' exact component={Home} />
         <Route path='/company' exact component={HomeCompany} />
         <Route path='/company/profile' exact component={CompanyProfile} />
+        <Route path='/company/detail' exact component={CompanyDetail} />
         <Route path='/engineer' exact component={HomeEngineer} />
         <Route path='/engineer/profile' exact component={EngProfileDetail} />
         <Route path='/login' exact component={Login} />
