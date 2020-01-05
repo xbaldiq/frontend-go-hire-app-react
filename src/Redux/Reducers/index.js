@@ -4,6 +4,7 @@ import engineerProfile from "./Engineer/Profile/engineerProfile";
 import engineerSkill from "./Engineer/Profile/engineerSkill";
 import assignedProject from "./Company/Project/engineerProjectList";
 import companyProfile from "./Company/Profile/companyProfile";
+import engineerList from "./Company/Data/engineerList";
 
 const reducers = combineReducers({
   engineerProjectList,
@@ -11,6 +12,7 @@ const reducers = combineReducers({
   engineerSkill,
   assignedProject,
   companyProfile,
+  engineerList
 });
 
 export default reducers;

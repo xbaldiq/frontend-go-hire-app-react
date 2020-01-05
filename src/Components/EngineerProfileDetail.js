@@ -140,9 +140,9 @@ class EngineerProfileDetail extends Component {
                 alert('Updating bio success');
               });
             this.setState({ onChangeTrigger: false });
-            await this.props.dispatch(
-              getEngineerProfile(localStorage.getItem('Token'))
-            );
+            // await this.props.dispatch(
+            //   getEngineerProfile(localStorage.getItem('Token'))
+            // );
           }}
         >
           Apply
@@ -211,12 +211,15 @@ class EngineerProfileDetail extends Component {
     // this.props.history.push('/engineer/profile');
   };
 
-  deleteSkill = (deletedSkill) => {
-    
-    this.props.dispatch(deleteEngineerSkill(deletedSkill,localStorage.getItem('Token'))).then(res => {
-      // alert(`success deleted ${deletedSkill}`)
-      alert(res)
-    })
+  deleteSkill = deletedSkill => {
+    this.props
+      .dispatch(
+        deleteEngineerSkill(deletedSkill, localStorage.getItem('Token'))
+      )
+      .then(res => {
+        alert(`success deleted ${deletedSkill}`)
+        // alert(res);
+      });
   };
 
   onClickInsertSkill = async () => {
@@ -232,14 +235,12 @@ class EngineerProfileDetail extends Component {
         alert(`Success insert ${this.state.newSkill}`);
         this.setState({ newSkill: '' });
       });
+      
   };
   render() {
-    console.log(this.state.onChangeSkillTriggerArray[0].onChangeSkill);
-
     const { engineerProfile } = this.props.engineerProfile;
     const { engineerSkillList } = this.props.engineerSkill;
 
-    console.log(this.state.defaultSkill);
     console.log('render');
 
     if (!this.state.token) {
@@ -385,26 +386,28 @@ class EngineerProfileDetail extends Component {
                           <Button>
                             <EditIcon htmlColor='darkGrey' />
                           </Button>
-                          <Button onClick={ () => {
-                            this.deleteSkill(skill.skill_no)
-                            // console.log('delete skill no', skill.skill_no)
-                          }}>
+                          <Button
+                            onClick={async () => {
+                              await this.props.dispatch(deleteEngineerSkill(skill.skill_no, localStorage.getItem('Token')))
+                              .then(res => {
+                                alert(`Successfully DELETE ${skill.skill_item} skill`)
+                              });
+                            }}
+                          >
                             <DeleteIcon htmlColor='darkGrey' />
                           </Button>
                         </TableCell>
                       </TableRow>
                     ))}
                     <TableRow key={'btn'}>
-                      {/* <TableCell> </TableCell> */}
                       <TableCell align='center' colSpan={3}>
                         {this.state.onChangeSkillTriggerArray[0].onChangeSkill
                           ? this.showApplySkillButton()
                           : this.disableApplySkillButton()}
                       </TableCell>
-                      {/* <TableCell> </TableCell> */}
                     </TableRow>
                     <TableRow>
-                      <TableCell colSpan={2} >
+                      <TableCell colSpan={2}>
                         <TextField
                           fullWidth
                           variant='outlined'
@@ -471,10 +474,6 @@ class EngineerProfileDetail extends Component {
         <Button
           disabled
           onClick={e => {
-            // this.setState({ onChangeTriggerSkill: false });
-            // this.setState({
-            //   defaulSkill: this.props.engineerSkill.engineerSkillList
-            // });
           }}
         >
           Cancel

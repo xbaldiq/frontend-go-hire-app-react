@@ -119,7 +119,7 @@ class Login extends Component {
           
           this.props.history.push('/engineer');
         })
-        .catch(err => alert('error', err));
+        .catch(err => alert(err.response.data.msg));
     } else if (this.state.user_type === 'company') {
       axios
         .post(data.url.company, data.register, data.headers)
@@ -133,10 +133,7 @@ class Login extends Component {
           this.setState({openSnackbar: true})
           this.props.history.push('/');
         })
-        .catch(err => {
-          console.log(err);
-          alert(err);
-        });
+        .catch(err => alert(err.response.data.msg));
     }
   }
 

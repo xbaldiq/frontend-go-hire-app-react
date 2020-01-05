@@ -31,13 +31,14 @@ import Pagination from 'material-ui-flat-pagination';
 import Navbar from './Navbar';
 import { connect } from 'react-redux';
 import { assignProject } from '../Redux/Actions/Company/Project/assignProject';
+import { getAllEngineer } from '../Redux/Actions/Company/Data/engineerList';
+import { combineReducers } from 'redux';
 
 export class Home extends Component {
   constructor(props) {
     super(props);
 
-    this.getAllEngineer = this.getAllEngineer.bind(this);
-    this.handleOnChange = this.handleOnChange.bind(this);
+    // this.getAllEngineer = this.getAllEngineer.bind(this);
     this.pagination = this.pagination.bind(this);
     this.handleClickOpenProfilePage = this.handleClickOpenProfilePage.bind(
       this
@@ -92,22 +93,40 @@ export class Home extends Component {
     offset: 0
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    console.log('didmount');
     if (this.state.user_type === 'engineer') {
       this.props.history.push('/engineer');
     } else if (this.state.user_type === 'company') {
-      this.getAllEngineer({});  
+      // this.getAllEngineer({});
+      // await this.props.dispatch(
+      //   getAllEngineer(
+      //     {
+      //       sort: this.state.sort_by,
+      //       order: this.state.order,
+      //       page: this.state.page,
+      //       limit: this.state.limit,
+      //       [this.state.search_by]: this.state.search
+      //     },
+      //     this.state.token
+      //   )
+      // );
+      await this.getAllEngineer();
+      this.setState({
+        response: this.props.engineerList.response,
+        total_data: this.props.engineerList.total_data
+      });
       this.getListProject();
       // this.props.history.push('/company');
     }
-  }
+  };
 
-  async handleOnChange({ target }) {
+  handleOnChange = async ({ target }) => {
     await this.setState({
       [target.name]: target.value
     });
-    this.getAllEngineer({});
-  }
+    await this.getAllEngineer({});
+  };
 
   getListProject = () => {
     const url = `http://localhost:8000/company/project`;
@@ -126,22 +145,40 @@ export class Home extends Component {
   };
 
   // GetAll Engineer
-  getAllEngineer = () => {
-    const url2 = `http://localhost:8000/engineer?sort=${this.state.sort_by}&order=${this.state.order}&page=${this.state.page}&limit=${this.state.limit}&${this.state.search_by}=${this.state.search}`;
-    axios
-      .get(url2, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer `.concat(this.state.token)
-        }
-      })
-      .then(async res => {
-        await this.setState({ pagination_config: res.data[0][0] });
-        await this.setState({ total_page: res.data[0][0].pagination });
-        await this.setState({ response: res.data[1] });
-        await this.setState({ total_data: res.data[0][0].total_data });
-      })
-      .catch(err => alert('error', err));
+  getAllEngineer = async () => {
+    console.log('getallengineer=', this.state.page);
+    await this.props.dispatch(
+      getAllEngineer(
+        {
+          sort: this.state.sort_by,
+          order: this.state.order,
+          page: this.state.page,
+          limit: this.state.limit,
+          [this.state.search_by]: this.state.search
+        },
+        this.state.token
+      )
+    )
+    this.setState({
+      response: this.props.engineerList.response,
+      total_data: this.props.engineerList.total_data
+    });
+
+    //   const url2 = `http://localhost:8000/engineer?sort=${this.state.sort_by}&order=${this.state.order}&page=${this.state.page}&limit=${this.state.limit}&${this.state.search_by}=${this.state.search}`;
+    //   axios
+    //     .get(url2, {
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: `Bearer `.concat(this.state.token)
+    //       }
+    //     })
+    //     .then(async res => {
+    //       await this.setState({ pagination_config: res.data[0][0] });
+    //       await this.setState({ total_page: res.data[0][0].pagination });
+    //       await this.setState({ response: res.data[1] });
+    //       await this.setState({ total_data: res.data[0][0].total_data });
+    //     })
+    //     .catch(err => alert('error', err));
   };
 
   // Logout
@@ -151,9 +188,7 @@ export class Home extends Component {
   };
 
   handleClickOpenProfilePage = (id, name) => {
-    // this.setState({ clickedId: id, clickedName: name });
     this.setState({ profilePageOpen: true });
-    // this.setState({ profileClicked: true });
   };
 
   handleCloseProfilePage = () => {
@@ -164,13 +199,20 @@ export class Home extends Component {
     this.setState({ profilePageOpen: false });
     await this.setState({ projectSelected: value.project_name });
     // this.assignProject();
-    await this.props.dispatch(
-      assignProject({
-        id_engineer: this.state.clickedId,
-        id_company: this.state.UserId,
-        name_project: this.state.projectSelected
-      },this.state.token)
-    );
+    await this.props
+      .dispatch(
+        assignProject(
+          {
+            id_engineer: this.state.clickedId,
+            id_company: this.state.UserId,
+            name_project: this.state.projectSelected
+          },
+          this.state.token
+        )
+      )
+      .then(() => {
+        alert('success hire this ');
+      });
   };
 
   profilePage = () => {
@@ -183,7 +225,7 @@ export class Home extends Component {
     }
     return (
       <>
-        <CssBaseline/>
+        <CssBaseline />
         {/* <Navbar
           name={this.state.username}
           changeLoginStatus={this.changeLoginStatus}
@@ -325,9 +367,11 @@ export class Home extends Component {
                   className='homeIcon'
                 />
               </Button>
-              <Button onClick={() => {
-                  this.profilePage()
-              }}>
+              <Button
+                onClick={() => {
+                  this.profilePage();
+                }}
+              >
                 <AccountBoxIcon
                   color='primary'
                   fontSize='large'
@@ -382,7 +426,6 @@ export class Home extends Component {
                     clickedSuccessrate: item.successrate,
                     profileClicked: true
                   });
-
                   console.log('engineerClicked: ', this.state.clickedId);
                 }}
               >
@@ -390,7 +433,7 @@ export class Home extends Component {
                   key={item.id}
                   name={item.name}
                   skill={item.skill}
-                  total_project={item.total_project || '-'}
+                  total_project={item.total_project || '0'}
                   successrate={item.successrate || '0'}
                 />
               </Button>
@@ -421,6 +464,8 @@ export class Home extends Component {
 
 const mapStateToProps = state => {
   return {
+    engineerList: state.engineerList
+    // total_data: state.engineerList
     // engineerProfile: state.engineerProfile,
     // engineerSkill: state.engineerSkill
   };

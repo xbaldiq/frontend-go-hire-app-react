@@ -13,7 +13,7 @@ export const getCompanyProfile = token => {
       }
     })
   };
-};
+};  
 export const patchCompanyProfile = (data,token) => {
   console.log('data',data)
   

@@ -72,7 +72,7 @@ class Register extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('Token') && this.state.isRegistered===true ) {
+    if (localStorage.getItem('Token') && this.state.isRegistered === true) {
       this.props.history.push('/');
     }
     console.log(localStorage.getItem('Token'));
@@ -103,20 +103,37 @@ class Register extends Component {
     };
 
     if (this.state.user_type === 'engineer') {
-      axios.post(data.url.engineer, data.register, data.headers).then(res => {
-        alert('Sukses registrasi sebagai Engineer');
-        this.setState({ isRegistered : true });
-      });
+      axios
+        .post(data.url.engineer, data.register, data.headers)
+        .then(res => {
+          alert('Success registration as Engineer');
+          this.setState({ isRegistered: true });
+        })
+        .catch(err => {
+          alert(err.response.data.msg); 
+        });
     } else if (this.state.user_type === 'company') {
-      axios.post(data.url.company, data.register).then(res => {
-        alert('Sukses registrasi sebagai Company');
-        this.setState({isRegistered : true});
-      });
+      axios
+        .post(data.url.company, data.register)
+        .then(res => {
+          alert('Success registration as Company');
+          this.setState({ isRegistered: true });
+          
+        })
+        .catch(err => {
+          alert(err.response.data.msg);
+        });
     }
   }
 
   render() {
     const { classes } = this.props;
+
+
+    if(this.state.isRegistered){
+      this.props.history.push('/login');
+    }
+
     return (
       <Grid container component='main' className={classes.root}>
         <CssBaseline />
