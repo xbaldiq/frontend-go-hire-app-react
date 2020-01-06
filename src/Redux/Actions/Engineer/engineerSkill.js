@@ -3,13 +3,15 @@ import Axios from 'axios';
 const URL_STRING = 'http://localhost:8000/engineer/skill';
 const URL_STRING_DELETE = 'http://localhost:8000/engineer/skill/1';
 
-export const getEngineerSkill = token => {
+
+export const getEngineerSkill = () => {
+  
   return {
     type: 'GET_ENG_SKILL',
     payload: Axios.get(URL_STRING, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer `.concat(token)
+        Authorization: `Bearer `.concat(localStorage.getItem('Token'))
       }
     })
   };

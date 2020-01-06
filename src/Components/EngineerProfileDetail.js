@@ -42,17 +42,16 @@ class EngineerProfileDetail extends Component {
     await this.props.dispatch(
       getEngineerProfile(localStorage.getItem('Token'))
     );
-    await this.props.dispatch(getEngineerSkill(localStorage.getItem('Token')));
+    await this.props.dispatch(getEngineerSkill());
 
     this.setState({
       defaultProfile: this.props.engineerProfile.engineerProfile,
-      defaultSkill: this.props.engineerSkill.engineerSkillList,
-      refSkill: this.props.engineerSkill.engineerSkillList
+      defaultSkill: this.props.engineerSkill.engineerSkill,
     });
 
     const skillLength = this.state.defaultSkill.length;
 
-    console.log('skillLength', skillLength);
+    // console.log('skillLength', skillLength);
     console.log('end didmount');
   };
 
@@ -65,7 +64,6 @@ class EngineerProfileDetail extends Component {
       }
     ],
     nameDefault: '',
-    refSkill: [],
     defaultSkill: [
       {
         no: 0,
@@ -140,9 +138,9 @@ class EngineerProfileDetail extends Component {
                 alert('Updating bio success');
               });
             this.setState({ onChangeTrigger: false });
-            // await this.props.dispatch(
-            //   getEngineerProfile(localStorage.getItem('Token'))
-            // );
+            await this.props.dispatch(
+              getEngineerProfile(localStorage.getItem('Token'))
+            );
           }}
         >
           Apply
@@ -191,9 +189,9 @@ class EngineerProfileDetail extends Component {
               onChangeSkill: false
             };
             this.setState({ onChangeSkillTriggerArray });
-            this.setState({
-              defaultSkill: this.props.engineerSkill.engineerSkillList
-            });
+            // this.setState({
+            //   defaultSkill: this.props.engineerSkill.engineerSkill
+            // });
           }}
         >
           Cancel
@@ -217,7 +215,7 @@ class EngineerProfileDetail extends Component {
         deleteEngineerSkill(deletedSkill, localStorage.getItem('Token'))
       )
       .then(res => {
-        alert(`success deleted ${deletedSkill}`)
+        alert(`success deleted ${deletedSkill}`);
         // alert(res);
       });
   };
@@ -235,11 +233,11 @@ class EngineerProfileDetail extends Component {
         alert(`Success insert ${this.state.newSkill}`);
         this.setState({ newSkill: '' });
       });
-      
+    // await this.props.dispatch(getEngineerSkill());
   };
   render() {
     const { engineerProfile } = this.props.engineerProfile;
-    const { engineerSkillList } = this.props.engineerSkill;
+    const { engineerSkill } = this.props.engineerSkill;
 
     console.log('render');
 
@@ -371,7 +369,7 @@ class EngineerProfileDetail extends Component {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {this.state.refSkill.map((skill, index) => (
+                    {this.state.defaultSkill.map((skill, index) => (
                       <TableRow key={index}>
                         <TableCell align='left'>{index + 1}</TableCell>
                         <TableCell align='left'>
@@ -388,10 +386,26 @@ class EngineerProfileDetail extends Component {
                           </Button>
                           <Button
                             onClick={async () => {
-                              await this.props.dispatch(deleteEngineerSkill(skill.skill_no, localStorage.getItem('Token')))
-                              .then(res => {
-                                alert(`Successfully DELETE ${skill.skill_item} skill`)
-                              });
+                              await this.props
+                                .dispatch(
+                                  deleteEngineerSkill(
+                                    skill.skill_no,
+                                    localStorage.getItem('Token')
+                                  )
+                                )
+                                .then(async res => {
+                                  alert(
+                                    `Successfully DELETE ${skill.skill_item} skill`
+                                  );
+                                  // this.setState({ onChangeTrigger: false });
+                                  // this.setState({
+                                  //   defaultSkill: this.props.engineerSkill
+                                  //     .engineerSkill
+                                  // });
+                                  await this.props.dispatch(getEngineerSkill());
+                                });
+
+                              // await this.props.dispatch(getEngineerSkill());
                             }}
                           >
                             <DeleteIcon htmlColor='darkGrey' />
@@ -471,11 +485,7 @@ class EngineerProfileDetail extends Component {
           Apply
         </Button>
 
-        <Button
-          disabled
-          onClick={e => {
-          }}
-        >
+        <Button disabled onClick={e => {}}>
           Cancel
         </Button>
       </>
