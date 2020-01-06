@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, withStyles } from '@material-ui/core/Styles';
+import {withStyles } from '@material-ui/core/styles';
 import LogoWhite from '../Components/styles/Pict/arkademy.svg';
 import './styles/Register.css';
 import LoginPict from '../Components/styles/Pict/loginPict.svg';
