@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './Styles/Card.css'
-import totalProject from './Styles/Pict/icon-project.svg'
-import successRate from './Styles/Pict/icon-success-rate.svg'
+import './styles/Card.css'
+import totalProject from './styles/Pict/icon-project.svg'
+import successRate from './styles/Pict/icon-success-rate.svg'
 import "typeface-roboto";
 
 export default class newCard extends Component {

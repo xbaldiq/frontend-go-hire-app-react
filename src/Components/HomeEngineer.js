@@ -11,7 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
-import './Styles/HomeEngineer.css';
+import './styles/HomeEngineer.css'
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import Button from '@material-ui/core/Button';

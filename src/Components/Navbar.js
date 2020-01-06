@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
-import Logo from '../Components/Styles/Pict/logo.png';
+import Logo from '../Components/styles/Pict/logo.png';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import SortIcon from '@material-ui/icons/Sort';
@@ -13,7 +13,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-// import './Styles/Navbar.css';
+import './styles/Navbar.css';
 
 export default class Navbar extends Component {
 
