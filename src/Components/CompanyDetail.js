@@ -113,7 +113,23 @@ class CompanyDetail extends Component {
     );
   };
 
+  logout = () => {
+    this.setState({ token: '' });
+    localStorage.clear();
+    alert('Logout Account')
+  };
+
+  profilePage = () => {
+    // this.props.history.push('/engineer/profile');
+  };
+
   render() {
+
+    if (!this.state.token) {
+      this.props.history.push('/login');
+    }
+
+
     const { companyProfile } = this.props.companyProfile;
 
     return (

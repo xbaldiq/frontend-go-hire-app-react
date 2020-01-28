@@ -43,22 +43,20 @@ class HomeEngineer extends Component {
   logout = () => {
     this.setState({ token: '' });
     localStorage.clear();
+    alert('Logout Account')
   };
 
   profilePage = () => {
     this.props.history.push('/engineer/profile');
   };
 
-
   handleStatusOnClick = async (e, name, status) => {  
-    await this.props.dispatch(responseProject({id: this.state.UserId, name_project:name, status_project:status }));
+    await this.props.dispatch(responseProject({id: this.state.UserId, name_project:name, status_project:status}));
     await this.props.dispatch(getProjectList(this.state.UserId));
   };
 
   render() {
-
     const { engineerProfile } = this.props.engineerProfile;
-
     if (!this.state.token) {
       this.props.history.push('/login');
     }
@@ -94,6 +92,7 @@ class HomeEngineer extends Component {
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                  
                   {this.props.engineerProjectList.engineerProjectList.map(
                     (project, index) => (
                       <TableRow key={index}>
@@ -104,9 +103,7 @@ class HomeEngineer extends Component {
                         <TableCell align='right'>{project.company}</TableCell>
                         <TableCell align='right'>{project.status}</TableCell>
                         <TableCell align='right'>
-                          {project.status === 'success' ||
-                          project.status === 'failed' ||
-                          project.status === 'rejected' ? (
+                          {project.status === 'success' || project.status === 'failed' || project.status === 'rejected' ? (
                             ''
                           ) : (
                             <>

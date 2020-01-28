@@ -4,16 +4,22 @@
 A Website for company to scouting and hiring available Engineer based on preference (skill, name, etc).
 
 ---
+
+## Feature
+- Redux
+- Login Register User
+- Sort and filter engineer based on skill or name
+- Pagination Engineer 
+- Compnay can hire multiple engineer and give them project
+- Engineer can accept and reject the given project
+
 ## Tools
 - Vscode
 - Postman
 - phpmyadmin
 - git
 
-## Feature
-- Register User
-- Sort and filter engineer with skill and name
-- Pagination
+
 
 ## Endpoint 
 - register 

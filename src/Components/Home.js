@@ -33,6 +33,7 @@ import { connect } from 'react-redux';
 import { assignProject } from '../Redux/Actions/Company/Project/assignProject';
 import { getAllEngineer } from '../Redux/Actions/Company/Data/engineerList';
 import { combineReducers } from 'redux';
+import { getCompanyProfile } from '../Redux/Actions/Company/Data/companyProfile';
 
 export class Home extends Component {
   constructor(props) {
@@ -77,7 +78,7 @@ export class Home extends Component {
     sort_by: 'name',
     search: '',
     order: 'asc',
-    name: '',
+    name: localStorage.getItem('name'),
     response: [],
     total_page: [],
     page: 1,
@@ -111,6 +112,9 @@ export class Home extends Component {
       //     this.state.token
       //   )
       // );
+
+      await this.props.dispatch(getCompanyProfile(this.state.token));
+
       await this.getAllEngineer();
       this.setState({
         response: this.props.engineerList.response,
@@ -130,7 +134,6 @@ export class Home extends Component {
 
   getListProject = () => {
     const url = `http://localhost:8000/company/project`;
-
     axios
       .get(url, {
         headers: {
@@ -185,6 +188,7 @@ export class Home extends Component {
   changeLoginStatus = () => {
     this.setState({ token: '' });
     localStorage.clear();
+    alert('Logout Account')
   };
 
   handleClickOpenProfilePage = (id, name) => {
@@ -223,6 +227,9 @@ export class Home extends Component {
     if (!this.state.token) {
       this.props.history.push('/login');
     }
+
+    const { companyProfile } = this.props.companyProfile;
+
     return (
       <>
         <CssBaseline />
@@ -237,8 +244,8 @@ export class Home extends Component {
           showCancelButton
           text={
             this.state.user_type == 'company'
-              ? `Skill: ${this.state.clickedSkill} \n Total Project Given: ${this.state.clickedTotalProject} \n Acceptance rate: ${this.state.clickedSuccessrate}% \n\n Hire?`
-              : `Skill: ${this.state.clickedSkill} \n Total Project Given: ${this.state.clickedTotalProject} \n Acceptance rate: ${this.state.clickedSuccessrate}%`
+              ? `Skill: ${this.state.clickedSkill || 'Belum diupdate'} \n Total Project Given: ${this.state.clickedTotalProject || 0} \n Acceptance rate: ${this.state.clickedSuccessrate||0}% \n\n Hire?`
+              : `Skill: ${this.state.clickedSkill || 'Belum diupdate'} \n Total Project Given: ${this.state.clickedTotalProject || 0} \n Acceptance rate: ${this.state.clickedSuccessrate||0}%`
           }
           onConfirm={event => {
             this.setState({ profileClicked: false });
@@ -286,7 +293,7 @@ export class Home extends Component {
         </Dialog>
 
         <AppBar position='static' className='appbar'>
-          <Toolbar className='toolbar'>
+          <Toolbar className='toolbar' style={{justifyContent:'center'}}>
             <img src={Logo} />
             <TextField
               className='searchbar'
@@ -377,7 +384,7 @@ export class Home extends Component {
                   fontSize='large'
                   className='accountIcon'
                 />
-                {this.state.name || this.state.username}
+                { companyProfile.name || this.state.username}
               </Button>
               <Button
                 onClick={() => {
@@ -464,7 +471,8 @@ export class Home extends Component {
 
 const mapStateToProps = state => {
   return {
-    engineerList: state.engineerList
+    engineerList: state.engineerList,
+    companyProfile: state.companyProfile
     // total_data: state.engineerList
     // engineerProfile: state.engineerProfile,
     // engineerSkill: state.engineerSkill

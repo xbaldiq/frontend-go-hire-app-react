@@ -6,6 +6,9 @@ import "typeface-roboto";
 
 export default class newCard extends Component {
     render() {
+
+        
+
         return (
             <div className="card-container">
                 <div className="card-main">

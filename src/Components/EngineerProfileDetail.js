@@ -140,9 +140,9 @@ class EngineerProfileDetail extends Component {
                 alert('Updating bio success');
               });
             this.setState({ onChangeTrigger: false });
-            // await this.props.dispatch(
-            //   getEngineerProfile(localStorage.getItem('Token'))
-            // );
+            await this.props.dispatch(
+              getEngineerProfile(localStorage.getItem('Token'))
+            );
           }}
         >
           Apply
@@ -205,6 +205,7 @@ class EngineerProfileDetail extends Component {
   logout = () => {
     this.setState({ token: '' });
     localStorage.clear();
+    alert('Logout Account')
   };
 
   profilePage = () => {
@@ -300,10 +301,10 @@ class EngineerProfileDetail extends Component {
                 </ListItem>
 
                 <ListItem>
-                  <ListItemText secondary='location' />
+                  <ListItemText secondary='Location' />
                   <TextField
                     value={this.state.defaultProfile.location}
-                    name='location'
+                    name='Location'
                     onChange={this.onChangeBio}
                   />
                   <ListItemIcon></ListItemIcon>

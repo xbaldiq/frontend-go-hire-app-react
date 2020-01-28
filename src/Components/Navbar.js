@@ -22,7 +22,7 @@ export default class Navbar extends Component {
       <>
         {/* <CssBaseline /> */}
         <AppBar position='static' className='appbar'>
-          <Toolbar className='toolbar'>
+          <Toolbar className='toolbar' style={{justifyContent: 'center'}}>
             <img src={Logo} />
             <TextField
               className='searchbar'

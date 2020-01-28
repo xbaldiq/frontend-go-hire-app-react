@@ -46,6 +46,7 @@ class CompanyProfile extends Component {
   logout = () => {
     this.setState({ token: '' });
     localStorage.clear();
+    alert('Logout Account')
   };
 
   profilePage = () => {
@@ -57,11 +58,14 @@ class CompanyProfile extends Component {
     if (!this.state.token) {
       this.props.history.push('/login');
     }
+
+    const { companyProfile } = this.props.companyProfile;
+
     return (
       <>
         <CssBaseline />
         <Navbar
-        name={this.state.username}
+        name={companyProfile.name}
         logout={this.logout}
         profilePage={this.profilePage}
         />
@@ -142,7 +146,8 @@ class CompanyProfile extends Component {
 
 const mapStateToProps = state => {
   return {
-    companyAssignedProject: state.assignedProject
+    companyAssignedProject: state.assignedProject,
+    companyProfile: state.companyProfile
   };
 };
 
