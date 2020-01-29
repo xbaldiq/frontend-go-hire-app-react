@@ -13,19 +13,16 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import './styles/Navbar.css';
 
 export default class Navbar extends Component {
 
   render() {
     return (
       <>
-        {/* <CssBaseline /> */}
         <AppBar position='static' className='appbar'>
-          <Toolbar className='toolbar' style={{justifyContent: 'center'}}>
+          <Toolbar style={{color: 'white', justifyContent: 'center', backgroundColor: 'white', minWidth:'50%', fontFamily:'Roboto sans-serif'}}>
             <img src={Logo} />
             <TextField
-              className='searchbar'
               id='input-with-icon-textfield'
               label='Search'
               variant='outlined'
@@ -39,6 +36,7 @@ export default class Navbar extends Component {
                   </InputAdornment>
                 )
               }}
+              style={{width: '15%'}}
             />
             <FormControl style={{ paddingLeft: '2rem' }}>
               <InputLabel style={{ paddingLeft: '3rem' }}>Filter:</InputLabel>
@@ -95,13 +93,6 @@ export default class Navbar extends Component {
                 ></SortIcon>
                 {this.props.order || 'ASC'}
               </Button>
-              {/* <Button>
-                <NotificationsIcon
-                  color='primary'
-                  fontSize='large'
-                  className='homeIcon'
-                />
-              </Button> */}
               <Button onClick={() => {
                 this.props.profilePage();
               }}>
