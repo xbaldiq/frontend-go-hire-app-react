@@ -1,10 +1,9 @@
-<h1 align="center">Go-Hire</h1>
+<p align="center">
+  <img src="screenshot/logoHire.png" width="200"/>
+</p>
 
 <h3 align="center">Web-based Version (React)</h3>
 
-<p align="center">
-  <img src="screenshot/ic_launcher_round.png" width="200"/>
-</p>
 
 ---
 
@@ -45,3 +44,7 @@ Go-Hire App is web-based App for company to scouting and hiring available Engine
       <image width="750" src="screenshot/detail-profile-engineer.jpg" />
   </span>
 </p>
+
+## License
+
+[ISC](https://en.wikipedia.org/wiki/ISC_license 'ISC')
