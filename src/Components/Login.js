@@ -95,8 +95,8 @@ class Login extends Component {
         password: this.state.password
       },
       url: {
-        engineer: `http://localhost:8000/login/engineer`,
-        company: `http://localhost:8000/login/company`
+        engineer: `http://3.80.150.111:8005/login/engineer`,
+        company: `http://3.80.150.111:8005/login/company`
       },
       headers: {
         'Content-Type': 'application/json'
