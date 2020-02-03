@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-const URL_STRING = 'http://localhost:8000/company/project/create';
+const URL_STRING = 'http://3.80.150.111:8005/company/project/create';
 
 export const createNewProject = (projectName,token) => {
   return {

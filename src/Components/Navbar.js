@@ -15,12 +15,19 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 
 export default class Navbar extends Component {
-
   render() {
     return (
       <>
         <AppBar position='static' className='appbar'>
-          <Toolbar style={{color: 'white', justifyContent: 'center', backgroundColor: 'white', minWidth:'50%', fontFamily:'Roboto sans-serif'}}>
+          <Toolbar
+            style={{
+              color: 'white',
+              justifyContent: 'center',
+              backgroundColor: 'white',
+              minWidth: '50%',
+              fontFamily: 'Roboto sans-serif'
+            }}
+          >
             <img src={Logo} />
             <TextField
               id='input-with-icon-textfield'
@@ -28,7 +35,7 @@ export default class Navbar extends Component {
               variant='outlined'
               name='search'
               value={this.props.search}
-              onChange={this.handleOnChange}
+              onChange={this.props.handleOnChange}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -36,7 +43,7 @@ export default class Navbar extends Component {
                   </InputAdornment>
                 )
               }}
-              style={{width: '15%'}}
+              style={{ width: '15%' }}
             />
             <FormControl style={{ paddingLeft: '2rem' }}>
               <InputLabel style={{ paddingLeft: '3rem' }}>Filter:</InputLabel>
@@ -45,7 +52,7 @@ export default class Navbar extends Component {
                 id='demo-simple-select'
                 name='search_by'
                 value={this.props.search_by || 'Name'}
-                onChange={this.handleOnChange}
+                onChange={this.props.handleOnChange}
               >
                 <MenuItem value={'name'}>Name</MenuItem>
                 <MenuItem value={'skill'}>Skill</MenuItem>
@@ -58,7 +65,7 @@ export default class Navbar extends Component {
                 id='demo-simple-select'
                 name='sort_by'
                 value={this.props.sort_by || 'Name'}
-                onChange={this.handleOnChange}
+                onChange={this.props.handleOnChange}
               >
                 <MenuItem value={'name'}>Name</MenuItem>
                 <MenuItem value={'skill'}>Skill</MenuItem>
@@ -71,7 +78,7 @@ export default class Navbar extends Component {
                 id='demo-simple-select'
                 name='limit'
                 value={this.props.limit || 5}
-                onChange={this.handleOnChange}
+                onChange={this.props.handleOnChange}
               >
                 <MenuItem value={'5'}>5</MenuItem>
                 <MenuItem value={'10'}>10</MenuItem>
@@ -79,38 +86,43 @@ export default class Navbar extends Component {
                 <MenuItem value={'50'}>50</MenuItem>
               </Select>
             </FormControl>
-              <Button>
-                <SortIcon
-                  color='primary'
-                  fontSize='large'
-                  className='homeIcon'
-                  onClick={async () => {
-                    (await this.props.order) === 'asc'
-                      ? this.setState({ order: 'desc' })
-                      : this.setState({ order: 'asc' });
-                    this.getAllEngineer();
-                  }}
-                ></SortIcon>
-                {this.props.order || 'ASC'}
-              </Button>
-              <Button onClick={() => {
+            <Button
+              name='order'
+              onClick={e => {
+                e.target.name = 'order'
+                e.target.value = 
+                this.props.order == 'asc' ? 'desc' : 'asc' 
+                this.props.handleOnChange(e);
+              }}
+            >
+              <SortIcon
+                color='primary'
+                fontSize='large'
+                className='homeIcon'
+              ></SortIcon>
+              
+              {this.props.order}
+            </Button>
+            <Button
+              onClick={() => {
                 this.props.profilePage();
-              }}>
-                <AccountBoxIcon
-                  color='primary'
-                  fontSize='large'
-                  className='accountIcon'
-                />
-                {this.props.name || this.props.username}
-              </Button>
-              <Button
-                onClick={() => {
-                  this.props.logout();
-                }}
-              >
-                <MeetingRoomIcon color='primary' fontSize='large' />
-                Logout
-              </Button>
+              }}
+            >
+              <AccountBoxIcon
+                color='primary'
+                fontSize='large'
+                className='accountIcon'
+              />
+              {this.props.name || this.props.username}
+            </Button>
+            <Button
+              onClick={() => {
+                this.props.logout();
+              }}
+            >
+              <MeetingRoomIcon color='primary' fontSize='large' />
+              Logout
+            </Button>
           </Toolbar>
         </AppBar>
       </>
