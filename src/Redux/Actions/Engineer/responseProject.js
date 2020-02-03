@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-const URL_STRING = `http://localhost:8000/engineer/project/`;
+const URL_STRING = `http://3.80.150.111:8005/engineer/project/`;
 
 export const responseProject = data => {
     return {
@@ -22,7 +22,7 @@ export const responseProject = data => {
   };
 
 // patchStatusProject = (name_project, status_project) => {
-//     const url = `http://localhost:8000/engineer/project/`;
+//     const url = `http://3.80.150.111:8005/engineer/project/`;
 //     axios
 //       .patch(url, null, {
 //         params: {

@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-const URL_STRING = 'http://localhost:8000/engineer/';
+const URL_STRING = 'http://3.80.150.111:8005/engineer/';
 
 export const patchEngineerProfile = (data,token) => {
   return {

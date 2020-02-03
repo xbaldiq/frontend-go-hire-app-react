@@ -31,7 +31,6 @@ import { assignProject } from '../Redux/Actions/Company/Project/assignProject';
 import { getAllEngineer } from '../Redux/Actions/Company/Data/engineerList';
 import { combineReducers } from 'redux';
 import { getCompanyProfile } from '../Redux/Actions/Company/Data/companyProfile';
-import Navbar from './Navbar';
 
 export class Home extends Component {
   constructor(props) {
@@ -97,6 +96,7 @@ export class Home extends Component {
     if (this.state.user_type === 'engineer') {
       this.props.history.push('/engineer');
     } else if (this.state.user_type === 'company') {
+
       await this.props.dispatch(getCompanyProfile(this.state.token));
 
       await this.getAllEngineer();
@@ -145,7 +145,7 @@ export class Home extends Component {
         },
         this.state.token
       )
-    );
+    )
     this.setState({
       response: this.props.engineerList.response,
       total_data: this.props.engineerList.total_data
@@ -169,10 +169,10 @@ export class Home extends Component {
   };
 
   // Logout
-  handleLogout = () => {
+  changeLoginStatus = () => {
     this.setState({ token: '' });
     localStorage.clear();
-    alert('Logout Account');
+    alert('Logout Account')
   };
 
   handleClickOpenProfilePage = (id, name) => {
@@ -223,14 +223,8 @@ export class Home extends Component {
           showCancelButton
           text={
             this.state.user_type == 'company'
-              ? `Skill: ${this.state.clickedSkill ||
-                  'Belum diupdate'} \n Total Project Given: ${this.state
-                  .clickedTotalProject || 0} \n Acceptance rate: ${this.state
-                  .clickedSuccessrate || 0}% \n\n Hire?`
-              : `Skill: ${this.state.clickedSkill ||
-                  'Belum diupdate'} \n Total Project Given: ${this.state
-                  .clickedTotalProject || 0} \n Acceptance rate: ${this.state
-                  .clickedSuccessrate || 0}%`
+              ? `Skill: ${this.state.clickedSkill || 'Belum diupdate'} \n Total Project Given: ${this.state.clickedTotalProject || 0} \n Acceptance rate: ${this.state.clickedSuccessrate||0}% \n\n Hire?`
+              : `Skill: ${this.state.clickedSkill || 'Belum diupdate'} \n Total Project Given: ${this.state.clickedTotalProject || 0} \n Acceptance rate: ${this.state.clickedSuccessrate||0}%`
           }
           onConfirm={event => {
             this.setState({ profileClicked: false });
@@ -277,18 +271,111 @@ export class Home extends Component {
           </DialogActions>
         </Dialog>
 
-        <Navbar
-          search={this.state.search}
-          search_by={this.state.search_by}
-          sort_by={this.state.sort_by}
-          limit={this.state.limit}
-          name={companyProfile.name}
-          order={this.state.order}
-          logout={this.handleLogout}
-          profilePage={this.profilePage}
-          handleOnChange={this.handleOnChange}
-        />
-        
+        <AppBar position='static' className='appbar'>
+          <Toolbar className='toolbar' style={{justifyContent:'center'}}>
+            <img src={Logo} />
+            <TextField
+              className='searchbar'
+              id='input-with-icon-textfield'
+              label='Search'
+              variant='outlined'
+              name='search'
+              value={this.state.search}
+              onChange={this.handleOnChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <SearchIcon />
+                  </InputAdornment>
+                )
+              }}
+            />
+            <FormControl style={{ paddingLeft: '2rem' }}>
+              <InputLabel style={{ paddingLeft: '3rem' }}>Filter:</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                name='search_by'
+                value={this.state.search_by}
+                onChange={this.handleOnChange}
+              >
+                <MenuItem value={'name'}>Name</MenuItem>
+                <MenuItem value={'skill'}>Skill</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl style={{ paddingLeft: '2rem' }}>
+              <InputLabel style={{ paddingLeft: '3rem' }}>Sort:</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                name='sort_by'
+                value={this.state.sort_by}
+                onChange={this.handleOnChange}
+              >
+                <MenuItem value={'name'}>Name</MenuItem>
+                <MenuItem value={'skill'}>Skill</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl style={{ paddingLeft: '2rem' }}>
+              <InputLabel style={{ paddingLeft: '3rem' }}>Item:</InputLabel>
+              <Select
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                name='limit'
+                value={this.state.limit}
+                onChange={this.handleOnChange}
+              >
+                <MenuItem value={'5'}>5</MenuItem>
+                <MenuItem value={'10'}>10</MenuItem>
+                <MenuItem value={'20'}>20</MenuItem>
+                <MenuItem value={'50'}>50</MenuItem>
+              </Select>
+            </FormControl>
+            <div className='navIcon'>
+              <Button>
+                <SortIcon
+                  color='primary'
+                  fontSize='large'
+                  className='homeIcon'
+                  onClick={async () => {
+                    (await this.state.order) === 'asc'
+                      ? this.setState({ order: 'desc' })
+                      : this.setState({ order: 'asc' });
+                    this.getAllEngineer();
+                  }}
+                ></SortIcon>
+                {this.state.order}
+              </Button>
+              <Button>
+                <NotificationsIcon
+                  color='primary'
+                  fontSize='large'
+                  className='homeIcon'
+                />
+              </Button>
+              <Button
+                onClick={() => {
+                  this.profilePage();
+                }}
+              >
+                <AccountBoxIcon
+                  color='primary'
+                  fontSize='large'
+                  className='accountIcon'
+                />
+                { companyProfile.name || this.state.username}
+              </Button>
+              <Button
+                onClick={() => {
+                  this.changeLoginStatus();
+                }}
+              >
+                <MeetingRoomIcon color='primary' fontSize='large' />
+                Logout
+              </Button>
+            </div>
+          </Toolbar>
+        </AppBar>
         <Grid
           container
           direction='row'

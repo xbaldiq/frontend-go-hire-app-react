@@ -83,8 +83,8 @@ class Register extends Component {
         password: this.state.password
       },
       url: {
-        engineer: `http://localhost:8000/register/engineer`,
-        company: `http://localhost:8000/register/company`
+        engineer: `http://3.80.150.111:8005/register/engineer`,
+        company: `http://3.80.150.111:8005/register/company`
       },
       headers: {
         'Content-Type': 'application/json'
