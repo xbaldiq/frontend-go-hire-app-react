@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
-const URL_STRING = 'http://3.80.150.111:8005/company/profile';
-const URL_STRING_PATCH = 'http://3.80.150.111:8005/company/';
+const URL_STRING = process.env.REACT_APP_API_ENDPOINT + `/company/profile`;
+const URL_STRING_PATCH = process.env.REACT_APP_API_ENDPOINT + `/company/`;
 
 export const getCompanyProfile = token => {
   return {

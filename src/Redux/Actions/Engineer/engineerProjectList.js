@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-const URL_STRING = 'http://3.80.150.111:8005/engineer/project/';
+const URL_STRING = process.env.REACT_APP_API_ENDPOINT + `/engineer/project/`;
 
 export const getProjectList = (id) => {
   return {

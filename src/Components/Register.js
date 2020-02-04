@@ -83,8 +83,8 @@ class Register extends Component {
         password: this.state.password
       },
       url: {
-        engineer: `http://3.80.150.111:8005/register/engineer`,
-        company: `http://3.80.150.111:8005/register/company`
+        engineer: process.env.REACT_APP_API_ENDPOINT + `/register/engineer`,
+        company: process.env.REACT_APP_API_ENDPOINT + `/register/company`
       },
       headers: {
         'Content-Type': 'application/json'

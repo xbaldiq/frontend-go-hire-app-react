@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-const URL_STRING = 'http://3.80.150.111:8005/engineer/';
+const URL_STRING = process.env.REACT_APP_API_ENDPOINT + `/engineer/`;
 
 export const getEngineerProfile = (token) => {
   return {

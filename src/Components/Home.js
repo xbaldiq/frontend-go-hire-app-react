@@ -117,7 +117,7 @@ export class Home extends Component {
   };
 
   getListProject = () => {
-    const url = `http://3.80.150.111:8005/company/project`;
+    const url = process.env.REACT_APP_API_ENDPOINT + `/company/project`;
     axios
       .get(url, {
         headers: {

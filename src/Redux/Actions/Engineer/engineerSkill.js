@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
-const URL_STRING = 'http://3.80.150.111:8005/engineer/skill';
-const URL_STRING_DELETE = 'http://3.80.150.111:8005/engineer/skill/1';
+const URL_STRING = process.env.REACT_APP_API_ENDPOINT + `/engineer/skill`;
+const URL_STRING_DELETE = process.env.REACT_APP_API_ENDPOINT + `/engineer/skill/1`;
 
 export const getEngineerSkill = token => {
   return {

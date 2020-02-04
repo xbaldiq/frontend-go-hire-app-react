@@ -95,10 +95,10 @@ class Login extends Component {
         password: this.state.password
       },
       url: {
-        // engineer: `http://3.80.150.111:8005/login/engineer`,
+        // engineer: `http://3.80.150.111:8005/login/engineer`y,
         
-        engineer: process.env.REACT_APP_API_ENDPOINT +`login/engineer`,
-        company: `http://3.80.150.111:8005/login/company`
+        engineer: process.env.REACT_APP_API_ENDPOINT +`/login/engineer`,
+        company: process.env.REACT_APP_API_ENDPOINT +`/login/company`
       },
       headers: {
         'Content-Type': 'application/json'
